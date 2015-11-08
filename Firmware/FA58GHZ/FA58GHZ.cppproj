@@ -18,8 +18,7 @@
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
-    <OverrideVtorValue>
-    </OverrideVtorValue>
+    <OverrideVtorValue>exception_table</OverrideVtorValue>
     <eraseonlaunchrule>0</eraseonlaunchrule>
     <ProgFlashFromRam>true</ProgFlashFromRam>
     <RamSnippetAddress>0x20000000</RamSnippetAddress>
@@ -28,15 +27,15 @@
     <BootSegment>0</BootSegment>
     <AsfFrameworkConfig>
       <framework-data>
-  <options />
-  <configurations />
-  <files />
-  <documentation help="" />
-  <offline-documentation help="" />
-  <dependencies>
-    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.6.0" />
-  </dependencies>
-</framework-data>
+        <options />
+        <configurations />
+        <files />
+        <documentation help="" />
+        <offline-documentation help="" />
+        <dependencies>
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.6.0" />
+        </dependencies>
+      </framework-data>
     </AsfFrameworkConfig>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -66,13 +65,15 @@
       <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/</Value>
-      <Value>C:/Program Files (x86)/Arduino/libraries/TVoutfonts</Value>
-      <Value>C:/Program Files (x86)/Arduino/libraries/TVout</Value>
-      <Value>C:/Program Files (x86)/Arduino/libraries/PinChangeInt</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM</Value>
       <Value>C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/TVoutfonts/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/TVoutfonts</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/TVout/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/TVout</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM</Value>
       <Value>../../FA58GHZ</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino</Value>
@@ -102,13 +103,15 @@
       <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/</Value>
-      <Value>C:/Program Files (x86)/Arduino/libraries/TVoutfonts</Value>
-      <Value>C:/Program Files (x86)/Arduino/libraries/TVout</Value>
-      <Value>C:/Program Files (x86)/Arduino/libraries/PinChangeInt</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM</Value>
       <Value>C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/TVoutfonts/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/TVoutfonts</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/TVout/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/TVout</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM</Value>
       <Value>../../FA58GHZ</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino</Value>
@@ -122,7 +125,221 @@
   <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
 </AvrGccCpp>
     </ToolchainSettings>
-    <VMSETTING_IncludePaths>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs;../../FA58GHZ;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM;C:/Program Files (x86)/Arduino/libraries/PinChangeInt;C:/Program Files (x86)/Arduino/libraries/TVout;C:/Program Files (x86)/Arduino/libraries/TVoutfonts;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/;C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;</VMSETTING_IncludePaths>
+    <VMSETTING_IncludePaths>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs;../../FA58GHZ;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM;C:/Program Files (x86)/Arduino/libraries/PinChangeInt;C:/Program Files (x86)/Arduino/libraries/TVout;C:/Program Files (x86)/Arduino/libraries/TVoutfonts;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/;C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM/utility;C:/Program Files (x86)/Arduino/libraries/TVout/utility;C:/Program Files (x86)/Arduino/libraries/TVoutfonts/utility;</VMSETTING_IncludePaths>
+    <VisualMicroSettings>
+      <VisualMicroSettings>
+        <arduino.board.name>pro_16MHzatmega328</arduino.board.name>
+        <arduino.board.desc>Arduino Pro or Pro Mini w/ ATmega328 (5V, 16 MHz)</arduino.board.desc>
+        <arduino.board.property_bag>name=Arduino Pro or Pro Mini w/ ATmega328 (5V, 16 MHz)
+upload.tool=avrdude
+upload.protocol=arduino
+bootloader.tool=avrdude
+bootloader.unlock_bits=0x3F
+bootloader.lock_bits=0x0F
+build.board=AVR_PRO
+build.core=arduino
+build.variant=eightanaloginputs
+menu.cpu.16MHzatmega328=ATmega328 (5V, 16 MHz)
+menu.cpu.16MHzatmega328.upload.maximum_size=30720
+menu.cpu.16MHzatmega328.upload.maximum_data_size=2048
+menu.cpu.16MHzatmega328.upload.speed=57600
+menu.cpu.16MHzatmega328.bootloader.low_fuses=0xFF
+menu.cpu.16MHzatmega328.bootloader.high_fuses=0xDA
+menu.cpu.16MHzatmega328.bootloader.extended_fuses=0x05
+menu.cpu.16MHzatmega328.bootloader.file=atmega/ATmegaBOOT_168_atmega328.hex
+menu.cpu.16MHzatmega328.build.mcu=atmega328p
+menu.cpu.16MHzatmega328.build.f_cpu=16000000L
+menu.cpu.8MHzatmega328=ATmega328 (3.3V, 8 MHz)
+menu.cpu.8MHzatmega328.upload.maximum_size=30720
+menu.cpu.8MHzatmega328.upload.maximum_data_size=2048
+menu.cpu.8MHzatmega328.upload.speed=57600
+menu.cpu.8MHzatmega328.bootloader.low_fuses=0xFF
+menu.cpu.8MHzatmega328.bootloader.high_fuses=0xDA
+menu.cpu.8MHzatmega328.bootloader.extended_fuses=0x05
+menu.cpu.8MHzatmega328.bootloader.file=atmega/ATmegaBOOT_168_atmega328_pro_8MHz.hex
+menu.cpu.8MHzatmega328.build.mcu=atmega328p
+menu.cpu.8MHzatmega328.build.f_cpu=8000000L
+menu.cpu.16MHzatmega168=ATmega168 (5V, 16 MHz)
+menu.cpu.16MHzatmega168.upload.maximum_size=14336
+menu.cpu.16MHzatmega168.upload.maximum_data_size=1024
+menu.cpu.16MHzatmega168.upload.speed=19200
+menu.cpu.16MHzatmega168.bootloader.low_fuses=0xff
+menu.cpu.16MHzatmega168.bootloader.high_fuses=0xdd
+menu.cpu.16MHzatmega168.bootloader.extended_fuses=0x00
+menu.cpu.16MHzatmega168.bootloader.file=atmega/ATmegaBOOT_168_diecimila.hex
+menu.cpu.16MHzatmega168.build.mcu=atmega168
+menu.cpu.16MHzatmega168.build.f_cpu=16000000L
+menu.cpu.8MHzatmega168=ATmega168 (3.3V, 8 MHz)
+menu.cpu.8MHzatmega168.upload.maximum_size=14336
+menu.cpu.8MHzatmega168.upload.maximum_data_size=1024
+menu.cpu.8MHzatmega168.upload.speed=19200
+menu.cpu.8MHzatmega168.bootloader.low_fuses=0xc6
+menu.cpu.8MHzatmega168.bootloader.high_fuses=0xdd
+menu.cpu.8MHzatmega168.bootloader.extended_fuses=0x00
+menu.cpu.8MHzatmega168.bootloader.file=atmega/ATmegaBOOT_168_pro_8MHz.hex
+menu.cpu.8MHzatmega168.build.mcu=atmega168
+menu.cpu.8MHzatmega168.build.f_cpu=8000000L
+runtime.ide.path=C:\Program Files (x86)\Arduino
+build.system.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr\system
+runtime.ide.version=164
+target_package=arduino
+target_platform=avr
+runtime.hardware.path=C:\Program Files (x86)\Arduino\hardware\arduino
+originalid=pro
+intellisense.tools.path={runtime.tools.avr-gcc.path}/
+intellisense.include.paths={intellisense.tools.path}avr/include/;{intellisense.tools.path}/avr/include/avr/;{intellisense.tools.path}lib\gcc\avr\4.8.1\include
+tools.atprogram.cmd.path=%AVRSTUDIO_EXE_PATH%\atbackend\atprogram
+tools.atprogram.cmd.setwinpath=true
+tools.atprogram.program.params.verbose=-v
+tools.atprogram.program.params.quiet=-q
+tools.atprogram.program.pattern="{cmd.path}" -d {build.mcu} {program.verbose} {program.extra_params} program -c -f "{build.path}\{build.project_name}.hex"
+tools.atprogram.program.xpattern="{cmd.path}" {AVRSTUDIO_BACKEND_CONNECTION} -d {build.mcu} {program.verbose} {program.extra_params} program -c -f "{build.path}\{build.project_name}.hex"
+version=1.6.7
+compiler.warning_flags=-w
+compiler.warning_flags.none=-w
+compiler.warning_flags.default=
+compiler.warning_flags.more=-Wall
+compiler.warning_flags.all=-Wall -Wextra
+compiler.path={runtime.tools.avr-gcc.path}/bin/
+compiler.c.cmd=avr-gcc
+compiler.c.flags=-c -g -Os {compiler.warning_flags} -ffunction-sections -fdata-sections -MMD
+compiler.c.elf.flags={compiler.warning_flags} -Os -Wl,--gc-sections
+compiler.c.elf.cmd=avr-gcc
+compiler.S.flags=-c -g -x assembler-with-cpp
+compiler.cpp.cmd=avr-g++
+compiler.cpp.flags=-c -g -Os {compiler.warning_flags} -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD
+compiler.ar.cmd=avr-ar
+compiler.ar.flags=rcs
+compiler.objcopy.cmd=avr-objcopy
+compiler.objcopy.eep.flags=-O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0
+compiler.elf2hex.flags=-O ihex -R .eeprom
+compiler.elf2hex.cmd=avr-objcopy
+compiler.ldflags=
+compiler.size.cmd=avr-size
+build.extra_flags=
+compiler.c.extra_flags=
+compiler.c.elf.extra_flags=
+compiler.S.extra_flags=
+compiler.cpp.extra_flags=
+compiler.ar.extra_flags=
+compiler.objcopy.eep.extra_flags=
+compiler.elf2hex.extra_flags=
+recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.c.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{object_file}"
+recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{object_file}"
+recipe.S.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.S.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.S.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{object_file}"
+recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{build.path}/{archive_file}" "{object_file}"
+recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} -mmcu={build.mcu} {compiler.c.elf.extra_flags} -o "{build.path}/{build.project_name}.elf" {object_files} "{build.path}/{archive_file}" "-L{build.path}" -lm
+recipe.objcopy.eep.pattern="{compiler.path}{compiler.objcopy.cmd}" {compiler.objcopy.eep.flags} {compiler.objcopy.eep.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.eep"
+recipe.objcopy.hex.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.hex"
+recipe.size.pattern="{compiler.path}{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
+recipe.size.regex=^(?:\.text|\.data|\.bootloader)\s+([0-9]+).*
+recipe.size.regex.data=^(?:\.data|\.bss|\.noinit)\s+([0-9]+).*
+recipe.size.regex.eeprom=^(?:\.eeprom)\s+([0-9]+).*
+tools.avrdude.path={runtime.tools.avrdude.path}
+tools.avrdude.cmd.path={path}/bin/avrdude
+tools.avrdude.config.path={path}/etc/avrdude.conf
+tools.avrdude.upload.params.verbose=-v
+tools.avrdude.upload.params.quiet=-q -q
+tools.avrdude.upload.pattern="{cmd.path}" "-C{config.path}" {upload.verbose} -p{build.mcu} -c{upload.protocol} -P{serial.port} -b{upload.speed} -D "-Uflash:w:{build.path}/{build.project_name}.hex:i"
+tools.avrdude.program.params.verbose=-v
+tools.avrdude.program.params.quiet=-q -q
+tools.avrdude.program.pattern="{cmd.path}" "-C{config.path}" {program.verbose} -p{build.mcu} -c{protocol} {program.extra_params} "-Uflash:w:{build.path}/{build.project_name}.hex:i"
+tools.avrdude.erase.params.verbose=-v
+tools.avrdude.erase.params.quiet=-q -q
+tools.avrdude.erase.pattern="{cmd.path}" "-C{config.path}" {erase.verbose} -p{build.mcu} -c{protocol} {program.extra_params} -e -Ulock:w:{bootloader.unlock_bits}:m -Uefuse:w:{bootloader.extended_fuses}:m -Uhfuse:w:{bootloader.high_fuses}:m -Ulfuse:w:{bootloader.low_fuses}:m
+tools.avrdude.bootloader.params.verbose=-v
+tools.avrdude.bootloader.params.quiet=-q -q
+tools.avrdude.bootloader.pattern="{cmd.path}" "-C{config.path}" {bootloader.verbose} -p{build.mcu} -c{protocol} {program.extra_params} "-Uflash:w:{runtime.platform.path}/bootloaders/{bootloader.file}:i" -Ulock:w:{bootloader.lock_bits}:m
+build.usb_manufacturer="Unknown"
+build.usb_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid} '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
+vm.platform.root.path=C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\arduino16x
+runtime.tools.avrdude.path=C:\Program Files (x86)\Arduino\hardware\tools\avr
+runtime.tools.avrdude-6.0.1-arduino5.path=C:\Program Files (x86)\Arduino\hardware\tools\avr
+runtime.tools.avr-gcc.path=C:\Program Files (x86)\Arduino\hardware\tools\avr
+runtime.tools.avr-gcc-4.8.1-arduino5.path=C:\Program Files (x86)\Arduino\hardware\tools\avr
+upload.maximum_size=30720
+upload.maximum_data_size=2048
+upload.speed=57600
+bootloader.low_fuses=0xFF
+bootloader.high_fuses=0xDA
+bootloader.extended_fuses=0x05
+bootloader.file=atmega/ATmegaBOOT_168_atmega328.hex
+build.mcu=atmega328p
+build.f_cpu=16000000L
+ide.hint=Arduino 1.6.x ide with support for downloaded Board Manager custom tools and hardware
+ide.location.key=Arduino16x
+ide.location.ide.winreg=Arduino 1.6.x Application
+ide.location.sketchbook.winreg=Arduino 1.6.x Sketchbook
+ide.location.sketchbook.preferences=sketchbook.path
+ide.default.version=160
+ide.default.package=arduino
+ide.default.platform=avr
+ide.multiplatform=true
+ide.includes=arduino.h
+ide.exe_name=arduino
+ide.platformswithoutpackage=false
+ide.includes.fallback=wprogram.h
+ide.extension=ino
+ide.extension.fallback=pde
+ide.versionGTEQ=160
+ide.exe=arduino.exe
+ide.hosts=atmel
+ide.url=http://arduino.cc/en/Main/Software
+ide.help.reference.path=reference\arduino.cc\en\Reference
+vm.debug=true
+software=ARDUINO
+ssh.user.name=root
+ssh.user.default.password=arduino
+ssh.host.wwwfiles.path=/www/sd
+build.working_directory={runtime.ide.path}
+ide.location.preferences.portable={runtime.ide.path}\portable
+ide.location.preferences=%VM_APPDATA_ROAMING%\arduino15\preferences.txt
+ide.location.preferences_fallback=%VM_APPDATA_LOCAL%\arduino15\preferences.txt
+ide.location.contributions=%VM_APPDATA_LOCAL%\arduino15
+ide.location.contributions_fallback=%VM_APPDATA_ROAMING%\arduino15
+ide.contributions.boards.allow=true
+ide.contributions.boards.ignore_unless_rewrite_found=true
+ide.contributions.libraries.allow=true
+ide.contributions.boards.support.urls.wiki=https://github.com/arduino/Arduino/wiki/Unofficial-list-of-3rd-party-boards-support-urls
+ide.appid=arduino16x
+location.sketchbook=C:\Program Files (x86)\Arduino
+vm.core.include=arduino.h
+vm.boardsource.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr
+runtime.platform.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr
+vm.platformname.name=avr
+build.arch=AVR
+build.architecture=avr
+vmresolved.compiler.path=C:\Program Files (x86)\Arduino\hardware\tools\avr\bin\
+vmresolved.tools.path=C:\Program Files (x86)\Arduino\hardware\tools\avr
+vm.runtime.compiler.showwarnings=false
+serial.port.file=COM34
+serial.port=COM34
+serial.port.num=34
+build.source.path=E:\Radio Controll\Electronic Projects\15 11 01 - HeadTracker-5.8GHzReceiver Module\FA58GHZ-VideoReceiver\Firmware\FA58GHZ\FA58GHZ.ino
+extra.time.local=69048372
+includes= -I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino"  -I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs"  -I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\EEPROM"  -I"C:\Program Files (x86)\Arduino\libraries\TVout"  -I"C:\Program Files (x86)\Arduino\libraries\TVoutfonts"  -I"C:\Program Files (x86)\Arduino\libraries"  -I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries"  -I"C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers"  -I"C:\Program Files (x86)\Arduino\libraries" 
+build.path=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328
+build.project_name=FA58GHZ
+build.variant.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs
+build.core.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino
+archive_file=core.a
+build.path_sketch=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328
+build.path_core=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328
+build.path_libraries=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328
+object_file=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328\TVoutfonts\font8x8ext.cpp.o
+source_file=C:\Program Files (x86)\Arduino\libraries\TVoutfonts\font8x8ext.cpp
+</arduino.board.property_bag>
+        <arduino.build.mcu>atmega328p</arduino.build.mcu>
+        <arduino.build.f_cpu>16000000L</arduino.build.f_cpu>
+        <arduino.build.core>arduino</arduino.build.core>
+        <arduino.upload.protocol>arduino</arduino.upload.protocol>
+        <arduino.upload.speed>57600</arduino.upload.speed>
+        <arduino.upload.maximum_size>30720</arduino.upload.maximum_size>
+        <visualmicro.application.name>arduino16x</visualmicro.application.name>
+        <visualmicro.package.name>arduino</visualmicro.package.name>
+        <visualmicro.platform.name>avr</visualmicro.platform.name>
+      </VisualMicroSettings>
+    </VisualMicroSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
@@ -151,13 +368,15 @@
       <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/</Value>
-      <Value>C:/Program Files (x86)/Arduino/libraries/TVoutfonts</Value>
-      <Value>C:/Program Files (x86)/Arduino/libraries/TVout</Value>
-      <Value>C:/Program Files (x86)/Arduino/libraries/PinChangeInt</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM</Value>
       <Value>C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/TVoutfonts/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/TVoutfonts</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/TVout/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/TVout</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM</Value>
       <Value>../../FA58GHZ</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino</Value>
@@ -187,13 +406,15 @@
       <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/</Value>
-      <Value>C:/Program Files (x86)/Arduino/libraries/TVoutfonts</Value>
-      <Value>C:/Program Files (x86)/Arduino/libraries/TVout</Value>
-      <Value>C:/Program Files (x86)/Arduino/libraries/PinChangeInt</Value>
-      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM</Value>
       <Value>C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>C:/Program Files (x86)/Arduino/libraries</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/TVoutfonts/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/TVoutfonts</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/TVout/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/TVout</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM</Value>
       <Value>../../FA58GHZ</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs</Value>
       <Value>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino</Value>
@@ -207,7 +428,221 @@
   <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
 </AvrGccCpp>
     </ToolchainSettings>
-    <VMSETTING_IncludePaths>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs;../../FA58GHZ;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM;C:/Program Files (x86)/Arduino/libraries/PinChangeInt;C:/Program Files (x86)/Arduino/libraries/TVout;C:/Program Files (x86)/Arduino/libraries/TVoutfonts;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/;C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;</VMSETTING_IncludePaths>
+    <VMSETTING_IncludePaths>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs;../../FA58GHZ;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM;C:/Program Files (x86)/Arduino/libraries/PinChangeInt;C:/Program Files (x86)/Arduino/libraries/TVout;C:/Program Files (x86)/Arduino/libraries/TVoutfonts;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/;C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM/utility;C:/Program Files (x86)/Arduino/libraries/TVout/utility;C:/Program Files (x86)/Arduino/libraries/TVoutfonts/utility;</VMSETTING_IncludePaths>
+    <VisualMicroSettings>
+      <VisualMicroSettings>
+        <arduino.board.name>pro_16MHzatmega328</arduino.board.name>
+        <arduino.board.desc>Arduino Pro or Pro Mini w/ ATmega328 (5V, 16 MHz)</arduino.board.desc>
+        <arduino.board.property_bag>name=Arduino Pro or Pro Mini w/ ATmega328 (5V, 16 MHz)
+upload.tool=avrdude
+upload.protocol=arduino
+bootloader.tool=avrdude
+bootloader.unlock_bits=0x3F
+bootloader.lock_bits=0x0F
+build.board=AVR_PRO
+build.core=arduino
+build.variant=eightanaloginputs
+menu.cpu.16MHzatmega328=ATmega328 (5V, 16 MHz)
+menu.cpu.16MHzatmega328.upload.maximum_size=30720
+menu.cpu.16MHzatmega328.upload.maximum_data_size=2048
+menu.cpu.16MHzatmega328.upload.speed=57600
+menu.cpu.16MHzatmega328.bootloader.low_fuses=0xFF
+menu.cpu.16MHzatmega328.bootloader.high_fuses=0xDA
+menu.cpu.16MHzatmega328.bootloader.extended_fuses=0x05
+menu.cpu.16MHzatmega328.bootloader.file=atmega/ATmegaBOOT_168_atmega328.hex
+menu.cpu.16MHzatmega328.build.mcu=atmega328p
+menu.cpu.16MHzatmega328.build.f_cpu=16000000L
+menu.cpu.8MHzatmega328=ATmega328 (3.3V, 8 MHz)
+menu.cpu.8MHzatmega328.upload.maximum_size=30720
+menu.cpu.8MHzatmega328.upload.maximum_data_size=2048
+menu.cpu.8MHzatmega328.upload.speed=57600
+menu.cpu.8MHzatmega328.bootloader.low_fuses=0xFF
+menu.cpu.8MHzatmega328.bootloader.high_fuses=0xDA
+menu.cpu.8MHzatmega328.bootloader.extended_fuses=0x05
+menu.cpu.8MHzatmega328.bootloader.file=atmega/ATmegaBOOT_168_atmega328_pro_8MHz.hex
+menu.cpu.8MHzatmega328.build.mcu=atmega328p
+menu.cpu.8MHzatmega328.build.f_cpu=8000000L
+menu.cpu.16MHzatmega168=ATmega168 (5V, 16 MHz)
+menu.cpu.16MHzatmega168.upload.maximum_size=14336
+menu.cpu.16MHzatmega168.upload.maximum_data_size=1024
+menu.cpu.16MHzatmega168.upload.speed=19200
+menu.cpu.16MHzatmega168.bootloader.low_fuses=0xff
+menu.cpu.16MHzatmega168.bootloader.high_fuses=0xdd
+menu.cpu.16MHzatmega168.bootloader.extended_fuses=0x00
+menu.cpu.16MHzatmega168.bootloader.file=atmega/ATmegaBOOT_168_diecimila.hex
+menu.cpu.16MHzatmega168.build.mcu=atmega168
+menu.cpu.16MHzatmega168.build.f_cpu=16000000L
+menu.cpu.8MHzatmega168=ATmega168 (3.3V, 8 MHz)
+menu.cpu.8MHzatmega168.upload.maximum_size=14336
+menu.cpu.8MHzatmega168.upload.maximum_data_size=1024
+menu.cpu.8MHzatmega168.upload.speed=19200
+menu.cpu.8MHzatmega168.bootloader.low_fuses=0xc6
+menu.cpu.8MHzatmega168.bootloader.high_fuses=0xdd
+menu.cpu.8MHzatmega168.bootloader.extended_fuses=0x00
+menu.cpu.8MHzatmega168.bootloader.file=atmega/ATmegaBOOT_168_pro_8MHz.hex
+menu.cpu.8MHzatmega168.build.mcu=atmega168
+menu.cpu.8MHzatmega168.build.f_cpu=8000000L
+runtime.ide.path=C:\Program Files (x86)\Arduino
+build.system.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr\system
+runtime.ide.version=164
+target_package=arduino
+target_platform=avr
+runtime.hardware.path=C:\Program Files (x86)\Arduino\hardware\arduino
+originalid=pro
+intellisense.tools.path={runtime.tools.avr-gcc.path}/
+intellisense.include.paths={intellisense.tools.path}avr/include/;{intellisense.tools.path}/avr/include/avr/;{intellisense.tools.path}lib\gcc\avr\4.8.1\include
+tools.atprogram.cmd.path=%AVRSTUDIO_EXE_PATH%\atbackend\atprogram
+tools.atprogram.cmd.setwinpath=true
+tools.atprogram.program.params.verbose=-v
+tools.atprogram.program.params.quiet=-q
+tools.atprogram.program.pattern="{cmd.path}" -d {build.mcu} {program.verbose} {program.extra_params} program -c -f "{build.path}\{build.project_name}.hex"
+tools.atprogram.program.xpattern="{cmd.path}" {AVRSTUDIO_BACKEND_CONNECTION} -d {build.mcu} {program.verbose} {program.extra_params} program -c -f "{build.path}\{build.project_name}.hex"
+version=1.6.7
+compiler.warning_flags=-w
+compiler.warning_flags.none=-w
+compiler.warning_flags.default=
+compiler.warning_flags.more=-Wall
+compiler.warning_flags.all=-Wall -Wextra
+compiler.path={runtime.tools.avr-gcc.path}/bin/
+compiler.c.cmd=avr-gcc
+compiler.c.flags=-c -g -Os {compiler.warning_flags} -ffunction-sections -fdata-sections -MMD
+compiler.c.elf.flags={compiler.warning_flags} -Os -Wl,--gc-sections
+compiler.c.elf.cmd=avr-gcc
+compiler.S.flags=-c -g -x assembler-with-cpp
+compiler.cpp.cmd=avr-g++
+compiler.cpp.flags=-c -g -Os {compiler.warning_flags} -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD
+compiler.ar.cmd=avr-ar
+compiler.ar.flags=rcs
+compiler.objcopy.cmd=avr-objcopy
+compiler.objcopy.eep.flags=-O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0
+compiler.elf2hex.flags=-O ihex -R .eeprom
+compiler.elf2hex.cmd=avr-objcopy
+compiler.ldflags=
+compiler.size.cmd=avr-size
+build.extra_flags=
+compiler.c.extra_flags=
+compiler.c.elf.extra_flags=
+compiler.S.extra_flags=
+compiler.cpp.extra_flags=
+compiler.ar.extra_flags=
+compiler.objcopy.eep.extra_flags=
+compiler.elf2hex.extra_flags=
+recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.c.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{object_file}"
+recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{object_file}"
+recipe.S.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.S.flags} -mmcu={build.mcu} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.S.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{object_file}"
+recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{build.path}/{archive_file}" "{object_file}"
+recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" {compiler.c.elf.flags} -mmcu={build.mcu} {compiler.c.elf.extra_flags} -o "{build.path}/{build.project_name}.elf" {object_files} "{build.path}/{archive_file}" "-L{build.path}" -lm
+recipe.objcopy.eep.pattern="{compiler.path}{compiler.objcopy.cmd}" {compiler.objcopy.eep.flags} {compiler.objcopy.eep.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.eep"
+recipe.objcopy.hex.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.hex"
+recipe.size.pattern="{compiler.path}{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
+recipe.size.regex=^(?:\.text|\.data|\.bootloader)\s+([0-9]+).*
+recipe.size.regex.data=^(?:\.data|\.bss|\.noinit)\s+([0-9]+).*
+recipe.size.regex.eeprom=^(?:\.eeprom)\s+([0-9]+).*
+tools.avrdude.path={runtime.tools.avrdude.path}
+tools.avrdude.cmd.path={path}/bin/avrdude
+tools.avrdude.config.path={path}/etc/avrdude.conf
+tools.avrdude.upload.params.verbose=-v
+tools.avrdude.upload.params.quiet=-q -q
+tools.avrdude.upload.pattern="{cmd.path}" "-C{config.path}" {upload.verbose} -p{build.mcu} -c{upload.protocol} -P{serial.port} -b{upload.speed} -D "-Uflash:w:{build.path}/{build.project_name}.hex:i"
+tools.avrdude.program.params.verbose=-v
+tools.avrdude.program.params.quiet=-q -q
+tools.avrdude.program.pattern="{cmd.path}" "-C{config.path}" {program.verbose} -p{build.mcu} -c{protocol} {program.extra_params} "-Uflash:w:{build.path}/{build.project_name}.hex:i"
+tools.avrdude.erase.params.verbose=-v
+tools.avrdude.erase.params.quiet=-q -q
+tools.avrdude.erase.pattern="{cmd.path}" "-C{config.path}" {erase.verbose} -p{build.mcu} -c{protocol} {program.extra_params} -e -Ulock:w:{bootloader.unlock_bits}:m -Uefuse:w:{bootloader.extended_fuses}:m -Uhfuse:w:{bootloader.high_fuses}:m -Ulfuse:w:{bootloader.low_fuses}:m
+tools.avrdude.bootloader.params.verbose=-v
+tools.avrdude.bootloader.params.quiet=-q -q
+tools.avrdude.bootloader.pattern="{cmd.path}" "-C{config.path}" {bootloader.verbose} -p{build.mcu} -c{protocol} {program.extra_params} "-Uflash:w:{runtime.platform.path}/bootloaders/{bootloader.file}:i" -Ulock:w:{bootloader.lock_bits}:m
+build.usb_manufacturer="Unknown"
+build.usb_flags=-DUSB_VID={build.vid} -DUSB_PID={build.pid} '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
+vm.platform.root.path=C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\arduino16x
+runtime.tools.avrdude.path=C:\Program Files (x86)\Arduino\hardware\tools\avr
+runtime.tools.avrdude-6.0.1-arduino5.path=C:\Program Files (x86)\Arduino\hardware\tools\avr
+runtime.tools.avr-gcc.path=C:\Program Files (x86)\Arduino\hardware\tools\avr
+runtime.tools.avr-gcc-4.8.1-arduino5.path=C:\Program Files (x86)\Arduino\hardware\tools\avr
+upload.maximum_size=30720
+upload.maximum_data_size=2048
+upload.speed=57600
+bootloader.low_fuses=0xFF
+bootloader.high_fuses=0xDA
+bootloader.extended_fuses=0x05
+bootloader.file=atmega/ATmegaBOOT_168_atmega328.hex
+build.mcu=atmega328p
+build.f_cpu=16000000L
+ide.hint=Arduino 1.6.x ide with support for downloaded Board Manager custom tools and hardware
+ide.location.key=Arduino16x
+ide.location.ide.winreg=Arduino 1.6.x Application
+ide.location.sketchbook.winreg=Arduino 1.6.x Sketchbook
+ide.location.sketchbook.preferences=sketchbook.path
+ide.default.version=160
+ide.default.package=arduino
+ide.default.platform=avr
+ide.multiplatform=true
+ide.includes=arduino.h
+ide.exe_name=arduino
+ide.platformswithoutpackage=false
+ide.includes.fallback=wprogram.h
+ide.extension=ino
+ide.extension.fallback=pde
+ide.versionGTEQ=160
+ide.exe=arduino.exe
+ide.hosts=atmel
+ide.url=http://arduino.cc/en/Main/Software
+ide.help.reference.path=reference\arduino.cc\en\Reference
+vm.debug=true
+software=ARDUINO
+ssh.user.name=root
+ssh.user.default.password=arduino
+ssh.host.wwwfiles.path=/www/sd
+build.working_directory={runtime.ide.path}
+ide.location.preferences.portable={runtime.ide.path}\portable
+ide.location.preferences=%VM_APPDATA_ROAMING%\arduino15\preferences.txt
+ide.location.preferences_fallback=%VM_APPDATA_LOCAL%\arduino15\preferences.txt
+ide.location.contributions=%VM_APPDATA_LOCAL%\arduino15
+ide.location.contributions_fallback=%VM_APPDATA_ROAMING%\arduino15
+ide.contributions.boards.allow=true
+ide.contributions.boards.ignore_unless_rewrite_found=true
+ide.contributions.libraries.allow=true
+ide.contributions.boards.support.urls.wiki=https://github.com/arduino/Arduino/wiki/Unofficial-list-of-3rd-party-boards-support-urls
+ide.appid=arduino16x
+location.sketchbook=C:\Program Files (x86)\Arduino
+vm.core.include=arduino.h
+vm.boardsource.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr
+runtime.platform.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr
+vm.platformname.name=avr
+build.arch=AVR
+build.architecture=avr
+vmresolved.compiler.path=C:\Program Files (x86)\Arduino\hardware\tools\avr\bin\
+vmresolved.tools.path=C:\Program Files (x86)\Arduino\hardware\tools\avr
+vm.runtime.compiler.showwarnings=false
+serial.port.file=COM34
+serial.port=COM34
+serial.port.num=34
+build.source.path=E:\Radio Controll\Electronic Projects\15 11 01 - HeadTracker-5.8GHzReceiver Module\FA58GHZ-VideoReceiver\Firmware\FA58GHZ\FA58GHZ.ino
+extra.time.local=69048372
+includes= -I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino"  -I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs"  -I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\EEPROM"  -I"C:\Program Files (x86)\Arduino\libraries\TVout"  -I"C:\Program Files (x86)\Arduino\libraries\TVoutfonts"  -I"C:\Program Files (x86)\Arduino\libraries"  -I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries"  -I"C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers"  -I"C:\Program Files (x86)\Arduino\libraries" 
+build.path=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328
+build.project_name=FA58GHZ
+build.variant.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs
+build.core.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino
+archive_file=core.a
+build.path_sketch=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328
+build.path_core=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328
+build.path_libraries=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328
+object_file=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328\TVoutfonts\font8x8ext.cpp.o
+source_file=C:\Program Files (x86)\Arduino\libraries\TVoutfonts\font8x8ext.cpp
+</arduino.board.property_bag>
+        <arduino.build.mcu>atmega328p</arduino.build.mcu>
+        <arduino.build.f_cpu>16000000L</arduino.build.f_cpu>
+        <arduino.build.core>arduino</arduino.build.core>
+        <arduino.upload.protocol>arduino</arduino.upload.protocol>
+        <arduino.upload.speed>57600</arduino.upload.speed>
+        <arduino.upload.maximum_size>30720</arduino.upload.maximum_size>
+        <visualmicro.application.name>arduino16x</visualmicro.application.name>
+        <visualmicro.package.name>arduino</visualmicro.package.name>
+        <visualmicro.platform.name>avr</visualmicro.platform.name>
+      </VisualMicroSettings>
+    </VisualMicroSettings>
   </PropertyGroup>
   <ItemGroup>
     <None Include="FA58GHZ.ino">
@@ -218,6 +653,9 @@
     <Folder Include="Visual Micro\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Definitions.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Visual Micro\.FA58GHZ.vsarduino.h">
       <SubType>compile</SubType>
     </Compile>

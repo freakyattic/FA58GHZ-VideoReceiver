@@ -22,7 +22,10 @@ extern "C" void __cxa_pure_virtual() {;}
 
 //
 //
+void beep(uint16_t time);
+void OSD_Ini ( void);
 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs\pins_arduino.h" 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
 #include <FA58GHZ.ino>
+#include <Definitions.h>
