@@ -37,20 +37,26 @@
 #include <fontALL.h>
 #include <avr/pgmspace.h>
 #include <EEPROM.h>
+#include <stdint.h>
 
 #include "Definitions.h"
+#include "RTC6715.h"
 
 
 /*****************************************************/
 /*		GLOBAL VARIABLES							 */
 /*****************************************************/
-	TVout TV;
+	TVout		TV;
 	
 	unsigned long	_millisLED;		//LED status
 
-void setup()
-{
-
+	uint8_t		eep_RFchannel;		//EEPROM channel saved.
+	
+/*****************************************************/
+/*		FUNCTIONS									 */
+/*****************************************************/
+void setup ( void )
+{	
 //Pinout Initialization
 	
 	//RF Module
@@ -98,10 +104,26 @@ void setup()
 			digitalWrite(led, LOW);
 			delay(100);
 		}
+		
+//EEPROM Initialization	
+	Load_EEPROM();
 					
 // OSD Initialization
-
-	OSD_Ini();
+	
+	char _value = 0;
+	
+	_value = TV.begin(PAL);
+	if (_value > 0) {	//ERROR with TV
+		while (true) {
+			digitalWrite(led, HIGH);
+			delay(300);
+			digitalWrite(led, LOW);
+			delay(300);
+		}
+	}
+	
+	TV.force_outstart(-6);
+	TV.force_linestart(41);
 	
 	TV.clear_screen();
 	TV.select_font(font4x6);
@@ -112,10 +134,15 @@ void setup()
 	TV.printPGM(0,20,PSTR("TEST SCREEN"));
 	TV.select_font(font8x8ext);
 	TV.printPGM(0,30,PSTR("TEST SCREEN"));
-	
-//Finish Initialization
 
+//RF Module ini
+	RF_Ini(eep_RFchannel);
+		
+//Finish Initialization
+	_debug(F("Board initialized ..."));
+	
 	_millisLED = millis();	//LED status				
+		
 }
 
 void loop()
@@ -126,12 +153,7 @@ void loop()
 //Button 1 test
 	if(digitalRead(buttonMode) == LOW)
 	{
-		if(!_val1)
-		digitalWrite(VideoSel0, HIGH);
-		else
-		digitalWrite(VideoSel0, LOW);
-		
-		_val1 ^= 1;
+		VideoMux(_val1 ^= 1);	//Togle input 0-1
 		
 		beep(10);
 		//Bounce
@@ -144,14 +166,13 @@ void loop()
 //Button 3 test
 	if(digitalRead(buttonFAN) == LOW)
 	{
-		if(!_val)
-			TV.pause();
+		if(_val ^= 1)
+			RF_ChannelSet(0x15);
 		else
-		{
-			TV.resume();
-		}
-		
-		_val ^= 1;
+			RF_ChannelSet(0x58);		
+			
+		Serial.print("Channel ");
+		Serial.println(RF_ChannelGet(), HEX);
 		
 		beep(10);
 		//Bounce
@@ -173,6 +194,9 @@ void loop()
 }
 
 
+/*****************************************************/
+/*		FUNCTIONS									 */
+/*****************************************************/
 
 void beep(uint16_t time)
 {
@@ -194,20 +218,59 @@ void beep(uint16_t time)
 	digitalWrite(buzzern, LOW);
 }
 
-void OSD_Ini ( void)
+void	_debug	( const __FlashStringHelper *description )
 {
-	char _value = 0;
-	_value = TV.begin(PAL);
-
-	if (_value > 0) {	//ERROR with TV
-		while (true) {
-			digitalWrite(led, HIGH);
-			delay(300);
-			digitalWrite(led, LOW);
-			delay(300);
-		}
+	#ifdef DEBUG
+	static char ini = 0;
+	if(!ini)
+	{
+		Serial.begin(115200);
+		Serial.print(F("\n\n\n\rFA58GHZ RF Video Module - Ver. "));
+		Serial.println(FIRMWAREVER);
+		Serial.println(F("By Freakyattic.com\n"));
+		ini++;
 	}
-		
-	TV.force_outstart(-6);
-	TV.force_linestart(41);
+	Serial.println(description);
+	#endif
+}
+
+void	Load_EEPROM		( void )
+{
+	eep_RFchannel = 0x15;
+}
+
+void	Save_EEPROM		( void )
+{
+	
+}
+
+void	VideoMux		( uint8_t _input)
+{
+	switch(_input)
+	{
+		case 1:			//RF Module
+			TV.pause();
+			digitalWrite(VideoSel0, HIGH);
+			digitalWrite(VideoSel1, LOW);
+			break;
+		case 2:
+			TV.pause();
+			digitalWrite(VideoSel0, LOW);
+			digitalWrite(VideoSel1, HIGH);
+			
+			break;
+		case 3:
+			TV.pause();
+			digitalWrite(VideoSel0, HIGH);
+			digitalWrite(VideoSel1, HIGH);
+			break;
+		default:
+		case 0:			//OSD
+			TV.resume();
+			digitalWrite(VideoSel0, LOW);
+			digitalWrite(VideoSel1, LOW);
+			break;
+	}
+	
+	
 }

@@ -125,7 +125,7 @@
   <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
 </AvrGccCpp>
     </ToolchainSettings>
-    <VMSETTING_IncludePaths>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs;../../FA58GHZ;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM;C:/Program Files (x86)/Arduino/libraries/PinChangeInt;C:/Program Files (x86)/Arduino/libraries/TVout;C:/Program Files (x86)/Arduino/libraries/TVoutfonts;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/;C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM/utility;C:/Program Files (x86)/Arduino/libraries/TVout/utility;C:/Program Files (x86)/Arduino/libraries/TVoutfonts/utility;</VMSETTING_IncludePaths>
+    <VMSETTING_IncludePaths>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs;../../FA58GHZ;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM;C:/Program Files (x86)/Arduino/libraries/PinChangeInt;C:/Program Files (x86)/Arduino/libraries/TVout;C:/Program Files (x86)/Arduino/libraries/TVoutfonts;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/;C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM/utility;C:/Program Files (x86)/Arduino/libraries/TVout/utility;C:/Program Files (x86)/Arduino/libraries/TVoutfonts/utility;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/micro;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/standard;</VMSETTING_IncludePaths>
     <VisualMicroSettings>
       <VisualMicroSettings>
         <arduino.board.name>pro_16MHzatmega328</arduino.board.name>
@@ -308,26 +308,6 @@ vm.boardsource.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr
 runtime.platform.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr
 vm.platformname.name=avr
 build.arch=AVR
-build.architecture=avr
-vmresolved.compiler.path=C:\Program Files (x86)\Arduino\hardware\tools\avr\bin\
-vmresolved.tools.path=C:\Program Files (x86)\Arduino\hardware\tools\avr
-vm.runtime.compiler.showwarnings=false
-serial.port.file=COM34
-serial.port=COM34
-serial.port.num=34
-build.source.path=E:\Radio Controll\Electronic Projects\15 11 01 - HeadTracker-5.8GHzReceiver Module\FA58GHZ-VideoReceiver\Firmware\FA58GHZ\FA58GHZ.ino
-extra.time.local=69048372
-includes= -I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino"  -I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs"  -I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\EEPROM"  -I"C:\Program Files (x86)\Arduino\libraries\TVout"  -I"C:\Program Files (x86)\Arduino\libraries\TVoutfonts"  -I"C:\Program Files (x86)\Arduino\libraries"  -I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries"  -I"C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers"  -I"C:\Program Files (x86)\Arduino\libraries" 
-build.path=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328
-build.project_name=FA58GHZ
-build.variant.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs
-build.core.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino
-archive_file=core.a
-build.path_sketch=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328
-build.path_core=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328
-build.path_libraries=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328
-object_file=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328\TVoutfonts\font8x8ext.cpp.o
-source_file=C:\Program Files (x86)\Arduino\libraries\TVoutfonts\font8x8ext.cpp
 </arduino.board.property_bag>
         <arduino.build.mcu>atmega328p</arduino.build.mcu>
         <arduino.build.f_cpu>16000000L</arduino.build.f_cpu>
@@ -428,7 +408,7 @@ source_file=C:\Program Files (x86)\Arduino\libraries\TVoutfonts\font8x8ext.cpp
   <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
 </AvrGccCpp>
     </ToolchainSettings>
-    <VMSETTING_IncludePaths>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs;../../FA58GHZ;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM;C:/Program Files (x86)/Arduino/libraries/PinChangeInt;C:/Program Files (x86)/Arduino/libraries/TVout;C:/Program Files (x86)/Arduino/libraries/TVoutfonts;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/;C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM/utility;C:/Program Files (x86)/Arduino/libraries/TVout/utility;C:/Program Files (x86)/Arduino/libraries/TVoutfonts/utility;</VMSETTING_IncludePaths>
+    <VMSETTING_IncludePaths>C:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs;../../FA58GHZ;C:/Program Files (x86)/Arduino/libraries;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM;C:/Program Files (x86)/Arduino/libraries/PinChangeInt;C:/Program Files (x86)/Arduino/libraries/TVout;C:/Program Files (x86)/Arduino/libraries/TVoutfonts;C:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/;C:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/;C:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;C:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/EEPROM/utility;C:/Program Files (x86)/Arduino/libraries/TVout/utility;C:/Program Files (x86)/Arduino/libraries/TVoutfonts/utility;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/micro;C:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/standard;</VMSETTING_IncludePaths>
     <VisualMicroSettings>
       <VisualMicroSettings>
         <arduino.board.name>pro_16MHzatmega328</arduino.board.name>
@@ -611,26 +591,6 @@ vm.boardsource.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr
 runtime.platform.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr
 vm.platformname.name=avr
 build.arch=AVR
-build.architecture=avr
-vmresolved.compiler.path=C:\Program Files (x86)\Arduino\hardware\tools\avr\bin\
-vmresolved.tools.path=C:\Program Files (x86)\Arduino\hardware\tools\avr
-vm.runtime.compiler.showwarnings=false
-serial.port.file=COM34
-serial.port=COM34
-serial.port.num=34
-build.source.path=E:\Radio Controll\Electronic Projects\15 11 01 - HeadTracker-5.8GHzReceiver Module\FA58GHZ-VideoReceiver\Firmware\FA58GHZ\FA58GHZ.ino
-extra.time.local=69048372
-includes= -I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino"  -I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs"  -I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\EEPROM"  -I"C:\Program Files (x86)\Arduino\libraries\TVout"  -I"C:\Program Files (x86)\Arduino\libraries\TVoutfonts"  -I"C:\Program Files (x86)\Arduino\libraries"  -I"C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries"  -I"C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers"  -I"C:\Program Files (x86)\Arduino\libraries" 
-build.path=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328
-build.project_name=FA58GHZ
-build.variant.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs
-build.core.path=C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino
-archive_file=core.a
-build.path_sketch=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328
-build.path_core=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328
-build.path_libraries=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328
-object_file=C:\Users\Javito\AppData\Local\V.Micro\Arduino\Builds\FA58GHZ\pro_16MHzatmega328\TVoutfonts\font8x8ext.cpp.o
-source_file=C:\Program Files (x86)\Arduino\libraries\TVoutfonts\font8x8ext.cpp
 </arduino.board.property_bag>
         <arduino.build.mcu>atmega328p</arduino.build.mcu>
         <arduino.build.f_cpu>16000000L</arduino.build.f_cpu>
@@ -648,12 +608,18 @@ source_file=C:\Program Files (x86)\Arduino\libraries\TVoutfonts\font8x8ext.cpp
     <None Include="FA58GHZ.ino">
       <SubType>compile</SubType>
     </None>
+    <None Include="RTC6715.ino">
+      <SubType>compile</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Visual Micro\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Definitions.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="RTC6715.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Visual Micro\.FA58GHZ.vsarduino.h">

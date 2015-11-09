@@ -20,12 +20,24 @@
 #define ARDUINO_ARCH_AVR
 extern "C" void __cxa_pure_virtual() {;}
 
-//
+void setup ( void );
 //
 void beep(uint16_t time);
-void OSD_Ini ( void);
+void	_debug	( const __FlashStringHelper *description );
+void	Load_EEPROM		( void );
+void	Save_EEPROM		( void );
+void	VideoMux		( uint8_t _input);
+void	RF_Ini	( uint8_t IniChannel );
+void	RF_ChannelSet		( uint8_t	channel);
+uint8_t		RF_ChannelGet		( void );
+void		RF_ChannelInc		( void );
+void		RF_ChannelDec		( void );
+uint16_t	RF_FrequencyGet		( void );
+uint16_t	RF_GetFrequencyFromChannel	( uint8_t	channel );
 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs\pins_arduino.h" 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
 #include <FA58GHZ.ino>
 #include <Definitions.h>
+#include <RTC6715.h>
+#include <RTC6715.ino>

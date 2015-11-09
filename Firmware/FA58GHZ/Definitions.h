@@ -37,6 +37,10 @@
 /*							CONFIGURATIONS																 */
 /*********************************************************************************************************/
 
+	#define FIRMWAREVER		"Beta1.0"	// Firmware Version
+
+	#define	DEBUG		// Un-comment for serial debug.
+
 	// BUTTON DEBOUNCE delay in ms
 	// NOTE: good values are in the range of 100-200ms
 	// shorter values will make it more reactive, but may lead to double trigger
