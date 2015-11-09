@@ -27,6 +27,14 @@ void	_debug	( const __FlashStringHelper *description );
 void	Load_EEPROM		( void );
 void	Save_EEPROM		( void );
 void	VideoMux		( uint8_t _input);
+void	Buttons_Tasks		( void );
+uint8_t	ispinbuttonMode_Click ( void );
+uint8_t	ispinbuttonMode_Hold ( void );
+uint8_t	ispinbuttonMode_HoldLong ( void );
+void	OSD_Ini		( void );
+void	OSD_Tasks	( void );
+void	OSDScreen_Main	( void );
+void	OSDScreen_Off	( void );
 void	RF_Ini	( uint8_t IniChannel );
 void	RF_ChannelSet		( uint8_t	channel);
 uint8_t		RF_ChannelGet		( void );
@@ -39,5 +47,7 @@ uint16_t	RF_GetFrequencyFromChannel	( uint8_t	channel );
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
 #include <FA58GHZ.ino>
 #include <Definitions.h>
+#include <OSDMenus.h>
+#include <OSDMenus.ino>
 #include <RTC6715.h>
 #include <RTC6715.ino>

@@ -46,18 +46,21 @@
 /*****************************************************/
 /*		GLOBAL VARIABLES							 */
 /*****************************************************/
-	TVout		TV;
 	
 	unsigned long	_millisLED;		//LED status
 
 	uint8_t		eep_RFchannel;		//EEPROM channel saved.
+	
+	stateButton		_pinbuttonMode = sbutton_idle;
+	stateButton		_pinbuttonNext = sbutton_idle;
+	stateButton		_pinbuttonFan = sbutton_idle;
 	
 /*****************************************************/
 /*		FUNCTIONS									 */
 /*****************************************************/
 void setup ( void )
 {	
-//Pinout Initialization
+//Pin out Initialization
 	
 	//RF Module
 		pinMode (slaveSelectPin, OUTPUT);
@@ -74,12 +77,12 @@ void setup ( void )
 			digitalWrite(VideoSel1, LOW);
 	
 	//Buttons
-		pinMode(buttonMode, INPUT);
-			digitalWrite(buttonMode, INPUT_PULLUP);
-		pinMode(buttonAction, INPUT);
-			digitalWrite(buttonAction, INPUT_PULLUP);
-		pinMode(buttonFAN, INPUT);
-			digitalWrite(buttonFAN, INPUT_PULLUP);			
+		pinMode(pinbuttonMode, INPUT);
+			digitalWrite(pinbuttonMode, INPUT_PULLUP);
+		pinMode(pinbuttonNext, INPUT);
+			digitalWrite(pinbuttonNext, INPUT_PULLUP);
+		pinMode(pinbuttonFan, INPUT);
+			digitalWrite(pinbuttonFan, INPUT_PULLUP);			
 	
 	// Buzzer
 		pinMode(buzzer, OUTPUT);
@@ -107,42 +110,17 @@ void setup ( void )
 		
 //EEPROM Initialization	
 	Load_EEPROM();
-					
-// OSD Initialization
-	
-	char _value = 0;
-	
-	_value = TV.begin(PAL);
-	if (_value > 0) {	//ERROR with TV
-		while (true) {
-			digitalWrite(led, HIGH);
-			delay(300);
-			digitalWrite(led, LOW);
-			delay(300);
-		}
-	}
-	
-	TV.force_outstart(-6);
-	TV.force_linestart(41);
-	
-	TV.clear_screen();
-	TV.select_font(font4x6);
-	TV.printPGM(0,0,PSTR("TEST SCREEN"));
-	TV.select_font(font6x8);
-	TV.printPGM(0,10,PSTR("TEST SCREEN"));
-	TV.select_font(font8x8);
-	TV.printPGM(0,20,PSTR("TEST SCREEN"));
-	TV.select_font(font8x8ext);
-	TV.printPGM(0,30,PSTR("TEST SCREEN"));
 
 //RF Module ini
 	RF_Ini(eep_RFchannel);
+
+// OSD Initialization
+	OSD_Ini();
 		
 //Finish Initialization
 	_debug(F("Board initialized ..."));
 	
-	_millisLED = millis();	//LED status				
-		
+	_millisLED = millis();	//LED status					
 }
 
 void loop()
@@ -150,37 +128,43 @@ void loop()
 	static char _val = 0;
 	static char _val1 = 0;
 
-//Button 1 test
-	if(digitalRead(buttonMode) == LOW)
-	{
-		VideoMux(_val1 ^= 1);	//Togle input 0-1
-		
-		beep(10);
-		//Bounce
-		delay(100);
-		while(digitalRead(buttonMode) == LOW);
-		delay(100);
-	}
-
-
-//Button 3 test
-	if(digitalRead(buttonFAN) == LOW)
-	{
-		if(_val ^= 1)
-			RF_ChannelSet(0x15);
-		else
-			RF_ChannelSet(0x58);		
-			
-		Serial.print("Channel ");
-		Serial.println(RF_ChannelGet(), HEX);
-		
-		beep(10);
-		//Bounce
-		delay(100);
-		while(digitalRead(buttonFAN) == LOW);
-		delay(100);
-	}
-
+////Button 1 test
+	//if(digitalRead(pinbuttonMode) == LOW)
+	//{
+		//VideoMux(_val1 ^= 1);	//Togle input 0-1
+		//
+		//beep(10);
+		////Bounce
+		//delay(100);
+		//while(digitalRead(pinbuttonMode) == LOW);
+		//delay(100);
+	//}
+//
+//
+////Button 3 test
+	//if(digitalRead(pinbuttonFan) == LOW)
+	//{
+		//if(_val ^= 1)
+			//RF_ChannelSet(0x15);
+		//else
+			//RF_ChannelSet(0x58);		
+			//
+		//Serial.print("Channel ");
+		//Serial.println(RF_ChannelGet(), HEX);
+		//
+		//beep(10);
+		////Bounce
+		//delay(100);
+		//while(digitalRead(pinbuttonFan) == LOW);
+		//delay(100);
+	//}
+	
+//Button Tasks
+	Buttons_Tasks();
+	
+//OSD Tasks
+	OSD_Tasks();
+	
 //LED Status
 	if(millis() > _millisLED)
 	{
@@ -249,28 +233,102 @@ void	VideoMux		( uint8_t _input)
 	switch(_input)
 	{
 		case 1:			//RF Module
-			TV.pause();
+			OSDScreen_Off();
 			digitalWrite(VideoSel0, HIGH);
 			digitalWrite(VideoSel1, LOW);
 			break;
 		case 2:
-			TV.pause();
+			OSDScreen_Off();
 			digitalWrite(VideoSel0, LOW);
 			digitalWrite(VideoSel1, HIGH);
-			
 			break;
 		case 3:
-			TV.pause();
+			OSDScreen_Off();
 			digitalWrite(VideoSel0, HIGH);
 			digitalWrite(VideoSel1, HIGH);
 			break;
 		default:
 		case 0:			//OSD
-			TV.resume();
+			OSDScreen_Main();
 			digitalWrite(VideoSel0, LOW);
 			digitalWrite(VideoSel1, LOW);
 			break;
 	}
+}
+
+/*****************************************************/
+/*		Buttons  									 */
+/*****************************************************/
+
+void	Buttons_Tasks		( void )
+{
+	static unsigned long	_millisButtMode = 0;
 	
-	
+//Button Mode
+	if(!digitalRead(pinbuttonMode))	
+	{
+		if(_millisButtMode == 0)
+		{
+			beep(15);
+			_millisButtMode = millis();
+		}
+	}
+	else
+	{
+		if(_millisButtMode != 0)
+		{
+			_millisButtMode = millis() - _millisButtMode;
+			
+			
+			if(_millisButtMode > BUTTON_GLITCHES)
+			{
+				if(_millisButtMode < BUTTON_CLICK)
+				{
+					_debug(F("click"));
+					_pinbuttonMode = sbutton_click;
+				}
+				else if(_millisButtMode < BUTTON_HOLD)
+				{
+					_debug(F("hold"));
+					_pinbuttonMode = sbutton_hold;
+				}
+				else if(_millisButtMode < BUTTON_HOLDLONG)
+				{
+					_debug(F("hold long"));
+					_pinbuttonMode = sbutton_holdlong;
+				}
+			}
+			_millisButtMode = 0;
+		}
+	}
+}
+
+uint8_t	ispinbuttonMode_Click ( void )
+{
+	if(_pinbuttonMode== sbutton_click)
+	{
+		_pinbuttonMode = sbutton_idle;
+		return 1;
+	}
+	return 0;
+}
+
+uint8_t	ispinbuttonMode_Hold ( void )
+{
+	if(_pinbuttonMode== sbutton_hold)
+	{
+		_pinbuttonMode = sbutton_idle;
+		return 1;
+	}
+	return 0;
+}
+
+uint8_t	ispinbuttonMode_HoldLong ( void )
+{
+	if(_pinbuttonMode== sbutton_holdlong)
+	{
+		_pinbuttonMode = sbutton_idle;
+		return 1;
+	}
+	return 0;
 }

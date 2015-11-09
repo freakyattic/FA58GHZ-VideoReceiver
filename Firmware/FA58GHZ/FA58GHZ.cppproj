@@ -608,6 +608,9 @@ build.arch=AVR
     <None Include="FA58GHZ.ino">
       <SubType>compile</SubType>
     </None>
+    <None Include="OSDMenus.ino">
+      <SubType>compile</SubType>
+    </None>
     <None Include="RTC6715.ino">
       <SubType>compile</SubType>
     </None>
@@ -617,6 +620,9 @@ build.arch=AVR
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Definitions.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="OSDMenus.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="RTC6715.h">

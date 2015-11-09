@@ -37,15 +37,17 @@
 /*							CONFIGURATIONS																 */
 /*********************************************************************************************************/
 
-	#define FIRMWAREVER		"Beta1.0"	// Firmware Version
+	#define		FIRMWAREVER		"Beta1.0"	// Firmware Version
 
-	#define	DEBUG		// Un-comment for serial debug.
+	#define		DEBUG		// Un-comment for serial debug.
 
 	// BUTTON DEBOUNCE delay in ms
 	// NOTE: good values are in the range of 100-200ms
 	// shorter values will make it more reactive, but may lead to double trigger
-	#define KEY_DEBOUNCE 200
+	#define		KEY_DEBOUNCE 200
 
+	#define		TV_WIDTH		128		//Screen width, MUST BE multiple of 8
+	#define		TV_HEIGHT		96		//Screen height
 
 /*********************************************************************************************************/
 /*							PIN DEFINITIONS																 */
@@ -68,9 +70,9 @@
 	#define VideoSel1		A1
 
 //Buttons
-	#define buttonMode		2
-	#define buttonAction	3
-	#define buttonFAN		4	//For the FAN
+	#define pinbuttonMode	2
+	#define pinbuttonNext	3
+	#define pinbuttonFan	4	//For the FAN
 	
 //Buzzer
 	#define buzzer			A2
@@ -90,5 +92,18 @@
 /*********************************************************************************************************/
 /*							OTHER DEFINITIONS															 */
 /*********************************************************************************************************/
+
+	#define     BUTTON_GLITCHES     50      //Minimum value to validate a click
+	#define     BUTTON_CLICK        600     //Minimum value for Click
+	#define     BUTTON_HOLD         3000    //Minimum value for Hold
+	#define     BUTTON_HOLDLONG     4000    //Minimum value for Hold Long
+	
+	enum stateButton
+	{
+		sbutton_idle,
+		sbutton_click,
+		sbutton_hold,
+		sbutton_holdlong,
+	};
 
 #endif /* DEFINITIONS_H_ */
