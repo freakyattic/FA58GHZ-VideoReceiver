@@ -121,6 +121,7 @@ void setup ( void )
 
 	//RF Module ini
 		RF_Ini(eep_RFchannel);
+		RF_ChannelSet(0x15);
 
 	// OSD Initialization
 		OSD_Ini();
@@ -205,7 +206,7 @@ void	_debug	( const __FlashStringHelper *description )
 
 void	Load_EEPROM		( void )
 {
-	uint8_t		_address;
+	uint16_t	_address;
 	uint8_t		_value0, _value1;
 	
 	//IF EEPROM structure changed, modify EEPROM_VER in Definitions.h
@@ -223,8 +224,8 @@ void	Load_EEPROM		( void )
 		//Default values
 		eep_VideoInput	= 0;
 		eep_RFchannel	= 0x15;
-		eep_RSSIMax		= 300;
-		eep_RSSIMin		= 90;
+		eep_RSSIMax		= 340;
+		eep_RSSIMin		= 145;
 		eep_FANTimeInc	= 3;
 		eep_FANPower	= 0;
 		eep_FANMode		= 0;
@@ -252,17 +253,17 @@ void	Save_EEPROM		( void )
 	EEPROM.write(_address++,eep_VideoInput);
 	
 	EEPROM.write(_address++,eep_RFchannel);
-	
+
+	EEPROM.write(_address++,highByte(eep_RSSIMax));	
 	EEPROM.write(_address++,lowByte(eep_RSSIMax));
-	EEPROM.write(_address++,highByte(eep_RSSIMax));
 	
-	EEPROM.write(_address++,lowByte(eep_RSSIMin));
 	EEPROM.write(_address++,highByte(eep_RSSIMin));
+	EEPROM.write(_address++,lowByte(eep_RSSIMin));
 	
 	EEPROM.write(_address++,eep_FANTimeInc);
 	EEPROM.write(_address++,eep_FANPower);
 	EEPROM.write(_address++,eep_FANMode);
-	
+
 	_debug(F("EEPROM: Configuration saved"));
 }
 

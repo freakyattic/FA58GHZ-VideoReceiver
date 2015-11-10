@@ -45,14 +45,15 @@ void	OSD_Tasks	( void );
 void	OSDScreen_Main	( void );
 void	OSDScreen_Off	( void );
 void	RF_Ini	( uint8_t IniChannel );
-void	RF_ChannelSet		( uint8_t	channelCode);
+void	RF_ChannelSet		( uint8_t	channel);
 uint8_t		RF_ChannelGet		( void );
 uint8_t		RF_ChannelGetIndex	( void );
 void		RF_ChannelInc		( void );
 void		RF_ChannelDec		( void );
 uint16_t	RF_FrequencyGet		( void );
-uint16_t	RF_GetFrequencyFromChannel	( uint8_t	channelCode );
-uint16_t	RF_RSSIGet			( void );
+uint16_t	RF_GetFrequencyFromChannel	( uint8_t	channel );
+uint16_t		RF_RSSIGet			( void );
+uint16_t	RF_RSSIGet_Raw		( void );
 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs\pins_arduino.h" 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"

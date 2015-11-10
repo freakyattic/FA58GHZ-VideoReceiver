@@ -37,7 +37,7 @@
 /*							VARIABLES																	 */
 /*********************************************************************************************************/
 
-	uint8_t		currentChannelIndex = 0;
+	uint8_t		currentChannel = 0;
 	uint16_t	currentFrequency = 0;		
 
 /*********************************************************************************************************/
@@ -62,28 +62,26 @@
 		RF_ChannelSet(IniChannel);
 		
 		RFSPI_LE_High();
-		
-		_debug(F("RF: Video RX initialized"));
 	}
 
 	
-	void	RF_ChannelSet		( uint8_t	channelCode)
-	{	
-		uint8_t _x;
+	void	RF_ChannelSet		( uint8_t	channel)
+	{
+		uint8_t	_x;
+		
+		currentChannel = channel;	//Save the channel selection.
 		
 		//Get the index
-		uint8_t	_high = ((channelCode & 0xF0)>>4)-1;
-		uint8_t	_low = (channelCode & 0x0F)-1;
+		uint8_t	_high = ((channel & 0xF0)>>4)-1;
+		uint8_t	_low = (channel & 0x0F)-1;
 		uint8_t _index = _high*8 + _low;
 		
-		if(_index >= MAX_RF_CHANNELS)
+		if(_index>= MAX_RF_CHANNELS)
+		{
 			_index = 0;
+			currentChannel =0x11;	
+		}
 	
-		//Save the index
-		currentChannelIndex = _index;
-		
-		Serial.println((int)_index);
-		
 		//Save current frequency
 		currentFrequency = pgm_read_word_near( channelFrequency + _index);
 		
@@ -102,7 +100,7 @@
 			RFSPI_Write1();	//R/W
 
 			// 16b code
-			for(_x = 16; _x > 0; _x--)
+			for(uint8_t x = 16; x > 0; x--)
 			{
 				if(freqcode & 0x01)
 				{
@@ -132,31 +130,40 @@
 	//channel code: BYTE - MSB band - LSB channel , 0xFF unknown
 	uint8_t		RF_ChannelGet		( void )
 	{
-		uint8_t	_high, _low;
-		
-		_high = (currentChannelIndex/8);
-		_low  = currentChannelIndex - (_high*8);
-		
-		return ((++_high<<4)&0xF0)|(++_low & 0x0F);
+		return currentChannel;
 	}
 	
-	uint8_t		RF_ChannelGetIndex	( void )
+	uint8_t		RF_ChannelGetIndex	( void )				//Index 0-MAXCH
 	{
-		return currentChannelIndex;
+		//Get the index
+		uint8_t	_high = ((currentChannel & 0xF0)>>4)-1;
+		uint8_t	_low = (currentChannel & 0x0F)-1;
+		return (_high*8 + _low);
 	}
-	
+
 	void		RF_ChannelInc		( void )
 	{
-		if( ++currentChannelIndex == MAX_RF_CHANNELS)
-			currentChannelIndex = 0;
-		RF_ChannelSet(RF_ChannelGet());
+		uint8_t _index = RF_ChannelGetIndex();
+		
+		if( ++_index == MAX_RF_CHANNELS)
+			_index = 0;
+
+		//Convert the index to channel code
+		uint8_t _high = (_index/8);
+		uint8_t _low = _index - (_high*8);
+		RF_ChannelSet((((++_high)<<4)&0xF0)|((++_low)&0x0F));
 	}
 
 	void		RF_ChannelDec		( void )
 	{
-		if( --currentChannelIndex == 0)
-			currentChannelIndex = MAX_RF_CHANNELS-1;
-		RF_ChannelSet(RF_ChannelGet());
+		uint8_t _index = RF_ChannelGetIndex();
+		if( --_index == 0)
+			_index = MAX_RF_CHANNELS-1;
+		
+		//Convert the index to channel code
+		uint8_t _high = (_index/8);
+		uint8_t _low = _index - (_high*8);
+		RF_ChannelSet((((++_high)<<4)&0xF0)|((++_low)&0x0F));
 	}
 
 	uint16_t	RF_FrequencyGet		( void )	//Current frequency
@@ -164,11 +171,11 @@
 		return currentFrequency;	
 	}
 
-	uint16_t	RF_GetFrequencyFromChannel	( uint8_t	channelCode )
+	uint16_t	RF_GetFrequencyFromChannel	( uint8_t	channel )
 	{
 		//Convert from channel code to index
-		uint8_t	_high = ((channelCode & 0xF0)>>4)-1;
-		uint8_t	_low = (channelCode & 0x0F)-1;
+		uint8_t	_high = ((channel & 0xF0)>>4)-1;
+		uint8_t	_low = (channel & 0x0F)-1;
 		uint8_t _value = _high*8 + _low;
 	
 		if(_value>= MAX_RF_CHANNELS)
@@ -178,17 +185,30 @@
 		return freq;
 	}
 	
-	uint16_t	RF_RSSIGet			( void )	//Get RSSI data
+	
+	uint16_t		RF_RSSIGet			( void )
+	{
+		uint16_t _val = RF_RSSIGet_Raw();
+		
+		if(_val < eep_RSSIMin)
+			return 0;
+			
+		if(_val > eep_RSSIMax)
+			return 100;
+			
+		return (((_val - eep_RSSIMin)*100) / (eep_RSSIMax - eep_RSSIMin));
+	}
+		
+
+	uint16_t	RF_RSSIGet_Raw		( void ) //Get RSSI data
 	{
 		unsigned long	_tot = 0;
 		
 		for( int _x=0; _x < RSSI_AVERAGE; _x++)
 		{
-			_tot += analogRead(rssiPin1);
+			_tot += (unsigned long)analogRead(rssiPin1);
 		}
 		
-		_tot = _tot / RSSI_AVERAGE;
+		_tot /= RSSI_AVERAGE;
 		return (uint16_t)_tot;
 	}
-
-	

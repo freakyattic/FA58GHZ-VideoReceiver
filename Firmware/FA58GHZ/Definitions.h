@@ -38,7 +38,7 @@
 /*********************************************************************************************************/
 
 	#define		FIRMWAREVER		"1.0b"	// Firmware Version
-	#define		EEPROM_VER		0x30	// EEPROM Data storage version
+	#define		EEPROM_VER		0x31	// EEPROM Data storage version
 
 	#define		DEBUG		// Uncomment for serial debug.
 

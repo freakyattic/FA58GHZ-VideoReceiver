@@ -328,9 +328,6 @@
 					TV.print(RF_ChannelGet(),HEX);
 					TV.print(" - ");
 					TV.print((int)RF_GetFrequencyFromChannel(RF_ChannelGet()));
-					uint16_t _rssi = RF_RSSIGet();	//get the RSSo
-					TV.set_cursor(38, 25);
-					TV.print((int)_rssi);
 					
 					_millisRSSI = millis();
 					_millisMenu = millis()+60000;
@@ -342,9 +339,10 @@
 				if( millis() > _millisRSSI)
 				{
 					_millisRSSI = millis()+250;
-					uint16_t _rssi = RF_RSSIGet();	//get the RSSo
 					TV.set_cursor(38, 25);
-					TV.print((int)_rssi);
+					TV.print((unsigned long)RF_RSSIGet());
+					TV.print(" - ");
+					TV.print((unsigned long)RF_RSSIGet_Raw());
 				}
 				
 				if(isbuttonNext_Click())	//Next Channel
