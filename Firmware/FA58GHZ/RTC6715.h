@@ -41,6 +41,8 @@
 	//The SPI pins must be defined outside this module: spiDataPin, slaveSelectPin, spiClockPin
 
 	#define		MAX_RF_CHANNELS		40		//Number of frequency channels
+	
+	#define		RSSI_AVERAGE		20		//Number of ADC average samples
 
 	// List of frequency channels in order
 	const unsigned char channelFreqOrder[] PROGMEM = {
@@ -73,16 +75,20 @@
 /*																										 */
 /*********************************************************************************************************/
 	
-	void		RF_Ini				( uint8_t IniChannel );
+	void		RF_Ini				( uint8_t   IniChannelCode );
 
-	void		RF_ChannelSet		( uint8_t	channel);	//channel code: BYTE - MSB band - LSB channel
+	void		RF_ChannelSet		( uint8_t	channelCode);	//channel code: BYTE - MSB band - LSB channel
 	uint8_t		RF_ChannelGet		( void );				//channel code: BYTE - MSB band - LSB channel , 0xFF unkown
+	uint8_t		RF_ChannelGetIndex  ( void );				//channel index 0-MAX_RF_CHANNELS
+	
 	void		RF_ChannelInc		( void );
 	void		RF_ChannelDec		( void );
+	
+	uint16_t	RF_RSSIGet			( void );	//Get RSSI data
 		
 	uint16_t	RF_FrequencyGet		( void );	//Current frequency
 	
-	uint16_t	RF_GetFrequencyFromChannel	( uint8_t	channel );	//Return the freq. from a channel code
+	uint16_t	RF_GetFrequencyFromChannel	( uint8_t	channelCode );	//Return the freq. from a channel code
 	
 
 #endif

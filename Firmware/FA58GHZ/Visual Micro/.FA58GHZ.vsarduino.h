@@ -22,26 +22,37 @@ extern "C" void __cxa_pure_virtual() {;}
 
 void setup ( void );
 //
+uint8_t		Read_RSSI	( void );
 void beep(uint16_t time);
 void	_debug	( const __FlashStringHelper *description );
 void	Load_EEPROM		( void );
 void	Save_EEPROM		( void );
-void	VideoMux		( uint8_t _input);
+void	VideoSelect		( uint8_t _input);
 void	Buttons_Tasks		( void );
-uint8_t	ispinbuttonMode_Click ( void );
-uint8_t	ispinbuttonMode_Hold ( void );
-uint8_t	ispinbuttonMode_HoldLong ( void );
+void	Clear_ButtonStates	( void );
+uint8_t	isbuttonMode_Click ( void );
+uint8_t	isbuttonMode_Hold ( void );
+uint8_t	isbuttonMode_HoldLong ( void );
+uint8_t	isbuttonNext_Click ( void );
+uint8_t	isbuttonNext_Hold ( void );
+uint8_t	isbuttonNext_HoldLong ( void );
+uint8_t	isbuttonFan_Click ( void );
+uint8_t	isbuttonFan_Hold ( void );
+uint8_t	isbuttonFan_HoldLong ( void );
+uint8_t	isbutton_AnyPressed( void );
 void	OSD_Ini		( void );
 void	OSD_Tasks	( void );
 void	OSDScreen_Main	( void );
 void	OSDScreen_Off	( void );
 void	RF_Ini	( uint8_t IniChannel );
-void	RF_ChannelSet		( uint8_t	channel);
+void	RF_ChannelSet		( uint8_t	channelCode);
 uint8_t		RF_ChannelGet		( void );
+uint8_t		RF_ChannelGetIndex	( void );
 void		RF_ChannelInc		( void );
 void		RF_ChannelDec		( void );
 uint16_t	RF_FrequencyGet		( void );
-uint16_t	RF_GetFrequencyFromChannel	( uint8_t	channel );
+uint16_t	RF_GetFrequencyFromChannel	( uint8_t	channelCode );
+uint16_t	RF_RSSIGet			( void );
 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs\pins_arduino.h" 
 #include "C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"

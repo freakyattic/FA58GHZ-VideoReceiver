@@ -38,10 +38,18 @@
 	TVout			TV;
 	OSDSTATES		OSD_State;		//Start with main OSD
 	
-	uint8_t			_selMenu = 0;	//selected menu
+	uint8_t			_selMenu, _selMenuPrev, _selMenuMax;	//selected menu
 	
-	unsigned long	delayMenuTimeout;
+	unsigned long	_millisMenu, _millisRSSI;
 
+/*********************************************************************************************************/
+/*							PROTOTYPES																	 */
+/*********************************************************************************************************/
+
+	void	SelectedMenu_Ini	( uint8_t _selected, uint8_t _maxItems);
+	void	SelectedMenu_Next	();
+	uint8_t	SelectedMenu_Get	();
+	
 /*********************************************************************************************************/
 /*							FUNCTIONS																	 */
 /*********************************************************************************************************/
@@ -63,35 +71,80 @@
 		TV.clear_screen();
 		
 		OSD_State = OSDs_Main;		//Start with the Intro screen.
+		
+		_debug(F("OSD: OSD initialized"));
 	}
 
 	void	OSD_Tasks	( void )
 	{
+		uint8_t		_val0;
+		
 		switch(OSD_State)
 		{
 	//Off
 			case OSDs_Off:
+				_debug(F("OSD: OSD off"));
+				Clear_ButtonStates();
+				VideoSelect(eep_VideoInput+1); //Select the Video input and switch off OSD
 				TV.pause();	//switch off OSD
-				_debug(F("OSD menu off"));
+				beep(80);
 				OSD_State = OSDs_OffUpdate;
 				break;
 			case OSDs_OffUpdate:
 			
-				//Automatic button functions.
+				//Enter Setup
+				if( isbuttonMode_Hold() | isbuttonMode_HoldLong())
+					OSD_State = OSDs_Main;
 				
+				////Select next channel
+				//if( isbuttonNext_Click())
+				
+				//// Automatic Scann
+				//if( isbuttonNext_Hold())
+					
 				break;
 				
 	//Intro - Welcome screen
 			case OSDs_Intro:
 			
-				//Place information about the channel selected.
+				Clear_ButtonStates();
+				VideoSelect(0);		//Select OSD
+				TV.clear_screen();
+				TV.draw_rect(0,0,TV_WIDTH-1,TV_HEIGHT-1,2);
 				
+				//Information
+				TV.select_font(font8x8ext);
+				TV.printPGM(35, 18,PSTR("FA58GHZ"));
+				TV.select_font(font4x6);
+				TV.printPGM(10, 40,PSTR("5.8GHz Video Rx - Ver."));
+				TV.print(FIRMWAREVER);
+				TV.printPGM(32, 50,PSTR("FreakyAttic.com"));
+				
+				//Place information about the channel selected.
+				TV.draw_line(0,74, TV_WIDTH-1, 74, 1);
+				TV.printPGM(12, 82,PSTR("Channel:"));
+				TV.set_cursor(50, 82);
+				TV.print(eep_RFchannel,HEX);
+				TV.printPGM(PSTR(" - "));
+				TV.print(RF_GetFrequencyFromChannel(eep_RFchannel));
+				TV.printPGM(PSTR(" - "));
+				TV.print(Read_RSSI(), DEC);
+				TV.printPGM(PSTR("%"));
+				
+				_millisMenu = millis()+MENU_TIMEOUT;
+				OSD_State = OSDs_IntroUpdate;
 				break;
 			case OSDs_IntroUpdate:
+				if(millis() > _millisMenu)
+					OSD_State = OSDs_Main;
 				break;				
 				
 	//Main Screen				
 			case OSDs_Main:
+				
+				Clear_ButtonStates();
+				VideoSelect(0);		//Select OSD			
+					
 				TV.resume();
 				TV.clear_screen();
 				
@@ -102,31 +155,229 @@
 
 				TV.select_font(font6x8);
 				TV.printPGM(5,20,PSTR("Video Input Select."));
-				TV.printPGM(5,30,PSTR("RF Manual Setup"));
-				TV.printPGM(5,40,PSTR("RF Scanner"));
+				TV.printPGM(5,30,PSTR("RF Channel Setup"));
+				TV.printPGM(5,40,PSTR("RF Spectrum"));
 				TV.printPGM(5,50,PSTR("Fan Output"));
 				TV.printPGM(5,60,PSTR("RSSI Calibration"));
 				TV.printPGM(5,70,PSTR("Exit"));
 				
+				SelectedMenu_Ini(5,6);
+				
+				_millisMenu = millis()+MENU_TIMEOUT;
 				OSD_State = OSDs_MainUpdate;
-
 				break;
 			case OSDs_MainUpdate:
 				
-				//delay(1000);
-				//TV.draw_rect(2,18,TV_WIDTH-5,10, 1, 2);
-				//TV.draw_rect(2,58,TV_WIDTH-5,10, 1, 2);
-				//delay(1000);
-				//TV.draw_rect(2,18,TV_WIDTH-5,10, 0, 2);
-				//TV.draw_rect(2,58,TV_WIDTH-5,10, 0, 2);
-					//
+				//Timeout - No user input
+				if(millis() > _millisMenu)
+				{
+					OSD_State = OSDs_Off;
+				}
+				
+				if(isbuttonNext_Click())
+				{
+					_millisMenu = millis()+MENU_TIMEOUT;
+					SelectedMenu_Next();
+				}
+					
+				if(isbuttonMode_Click())
+				{
+					beep_Confirmation();
+					_millisMenu = millis()+MENU_TIMEOUT;
+					switch(SelectedMenu_Get())
+					{
+						case 0:		//Video Select
+							OSD_State = OSDs_VideoInput;
+							break;
+						case 1:		//RF Manual Setup
+							OSD_State = OSDs_RFManual;
+							break;						
+						case 2:		//RF Spectrum
+							delay(1000);
+							beep(19);
+							RF_ChannelSet(0x15);
+							break;
+						case 3:		//Fan Output
+							delay(1000);
+							beep(19);
+							RF_ChannelSet(0x58);
+							break;
+						case 4:		//RSSI Calibration
+							break;
+						case 5:		//Exit
+							OSD_State = OSDs_Off;
+							break;	
+					}
+				}
 				break;
 				
 	//Video Input selection		
 			case OSDs_VideoInput:
+			
+				Clear_ButtonStates();
+				TV.resume();
+				TV.clear_screen();
+			
+				//Box
+				TV.draw_rect(0,0,TV_WIDTH-1,TV_HEIGHT-1,2);
+				TV.select_font(font4x6);
+				TV.printPGM(20,3,PSTR("Video Input Menu"));
+				TV.draw_line(0,11,TV_WIDTH-1,11,2);
+
+				//Menu
+				TV.select_font(font6x8);
+				TV.printPGM(5,20,PSTR("  RF Video 1"));
+				TV.printPGM(5,30,PSTR("  RF Video 2"));
+				TV.printPGM(5,40,PSTR("  Ext. Video"));
+				TV.printPGM(5,50,PSTR("  RF Diversity"));
+				TV.printPGM(5,60,PSTR("Exit"));
+				
+				//Mark the selected Input
+				TV.printPGM(5,(20+eep_VideoInput*10),PSTR(">"));
+				SelectedMenu_Ini(4, 5);
+			
+				_millisMenu = millis()+MENU_TIMEOUT;
+				OSD_State = OSDs_VideoInputUpdate;
 				break;
 			case OSDs_VideoInputUpdate:
+			
+				//Timeout - No user input
+				if(millis() > _millisMenu)
+					OSD_State = OSDs_Main;
+				
+				if(isbuttonNext_Click())
+				{
+					_millisMenu = millis()+MENU_TIMEOUT;
+					SelectedMenu_Next();
+				}
+				
+				if(isbuttonMode_Click())
+				{
+					_millisMenu = millis()+MENU_TIMEOUT;
+					_val0 = SelectedMenu_Get();
+					
+					if(_val0 == 4)	//Exit
+					{
+						OSD_State = OSDs_Main;
+						break;
+					}
+
+					if( _val0 == 3)	//Diversity not supported yet
+						_val0 = 0;
+						
+					//Save the value
+					eep_VideoInput = _val0;
+					Save_EEPROM();
+					beep_Confirmation();
+					OSD_State = OSDs_Main;
+				}
 				break;	
+				
+//OSD RF Manual				
+			case OSDs_RFManual:
+				Clear_ButtonStates();
+				TV.resume();
+				TV.clear_screen();
+			
+				//Place Key Info	
+				TV.select_font(font6x8);
+				TV.printPGM(10,10,PSTR("Button Key Info"));
+				TV.select_font(font4x6);
+				TV.printPGM(12,25,PSTR("Next Click: Ch+"));
+				TV.printPGM(12,35,PSTR("     Hold : Scan"));
+				TV.printPGM(12,50,PSTR("Mode Click: Exit"));
+				TV.printPGM(12,60,PSTR("     Hold : Save"));
+				
+				TV.printPGM(5,90,PSTR("Press any to continue..."));
+				_millisMenu = millis()+5000;
+				OSD_State = OSDs_RFManualUpdate0;
+				break;
+			case OSDs_RFManualUpdate0:				
+				//Wait some time
+				if((millis() >_millisMenu) | isbutton_AnyPressed())
+				{
+					OSD_State = OSDs_RFManualUpdate1;
+					
+					//Print the menu
+					TV.clear_screen();
+					
+					//Box
+					TV.draw_rect(0,0,TV_WIDTH-1,35,1);
+					TV.select_font(font4x6);
+					TV.printPGM(20,3,PSTR("RF Channel Selection"));
+					TV.draw_line(0,11,TV_WIDTH-1,11,1);
+					
+					//Channel
+					TV.select_font(font6x8);
+					TV.printPGM(5,15,PSTR("Channel: "));
+					TV.printPGM(5,25,PSTR("RSSI: "));
+					
+					//Draw Spectrum Box
+					TV.draw_rect(21,37,84,50,1);
+					TV.select_font(font4x6);
+					TV.set_cursor(15,90);
+					TV.print((int)RF_GetFrequencyFromChannel(0x34));	//Low Freq
+					TV.set_cursor(55,90);
+					TV.print((int)RF_GetFrequencyFromChannel(0x24));	//Mid Freq
+					TV.set_cursor(95,90);
+					TV.print((int)RF_GetFrequencyFromChannel(0x38));	//Mid Freq
+					
+					//Update screen Values
+					TV.select_font(font6x8);
+					TV.set_cursor(60, 15);
+					TV.print(RF_ChannelGet(),HEX);
+					TV.print(" - ");
+					TV.print((int)RF_GetFrequencyFromChannel(RF_ChannelGet()));
+					uint16_t _rssi = RF_RSSIGet();	//get the RSSo
+					TV.set_cursor(38, 25);
+					TV.print((int)_rssi);
+					
+					_millisRSSI = millis();
+					_millisMenu = millis()+60000;
+				}
+				break;
+			case OSDs_RFManualUpdate1:
+			
+				//Update RSSI 4 Hz
+				if( millis() > _millisRSSI)
+				{
+					_millisRSSI = millis()+250;
+					uint16_t _rssi = RF_RSSIGet();	//get the RSSo
+					TV.set_cursor(38, 25);
+					TV.print((int)_rssi);
+				}
+				
+				if(isbuttonNext_Click())	//Next Channel
+				{
+					_millisMenu = millis()+60000;
+					
+					RF_ChannelInc();
+					delay(100);	//some time to stabilize
+					
+					//Update screen Values
+					TV.select_font(font6x8);
+					TV.set_cursor(60, 15);
+					TV.print(RF_ChannelGet(),HEX);
+					TV.print(" - ");
+					TV.print((int)RF_GetFrequencyFromChannel(RF_ChannelGet()));
+				}
+									
+				if(isbuttonMode_Click())	//Exit
+					OSD_State = OSDs_Main;	
+
+				if(isbuttonMode_Hold())		//Save Current
+				{
+					beep_Confirmation();
+					eep_RFchannel = RF_ChannelGet();	//Save the channel
+					Save_EEPROM();
+					OSD_State = OSDs_Main;
+				}
+				
+					
+				//Timeout - No user input
+				if(millis() > _millisMenu)
+					OSD_State = OSDs_Main;	
+				break;
 		}
 	
 	
@@ -144,3 +395,31 @@
 			OSD_State = OSDs_Off;
 	}
 
+	void	SelectedMenu_Ini ( uint8_t _selected, uint8_t _maxItems)
+	{
+		_selMenu = _selected;
+		_selMenuPrev = _selMenu;
+		_selMenuMax = _maxItems;
+		
+		//Select Menu
+		TV.draw_rect(2,(18 + _selected*10),TV_WIDTH-5,10, 1, 2);
+	}
+	
+	void	SelectedMenu_Next ()
+	{
+		if(++_selMenu == _selMenuMax)
+			_selMenu = 0;
+		
+		//DeSelect Previous
+		TV.draw_rect(2,(18 + _selMenuPrev*10),TV_WIDTH-5,10, 0, 2);
+		
+		//Select Menu
+		TV.draw_rect(2,(18 + _selMenu*10),TV_WIDTH-5,10, 1, 2);
+		
+		_selMenuPrev = _selMenu;
+	}
+	
+	uint8_t	SelectedMenu_Get ()
+	{
+		return _selMenu;
+	}

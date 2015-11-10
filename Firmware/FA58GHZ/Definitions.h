@@ -37,14 +37,10 @@
 /*							CONFIGURATIONS																 */
 /*********************************************************************************************************/
 
-	#define		FIRMWAREVER		"Beta1.0"	// Firmware Version
+	#define		FIRMWAREVER		"1.0b"	// Firmware Version
+	#define		EEPROM_VER		0x30	// EEPROM Data storage version
 
-	#define		DEBUG		// Un-comment for serial debug.
-
-	// BUTTON DEBOUNCE delay in ms
-	// NOTE: good values are in the range of 100-200ms
-	// shorter values will make it more reactive, but may lead to double trigger
-	#define		KEY_DEBOUNCE 200
+	#define		DEBUG		// Uncomment for serial debug.
 
 	#define		TV_WIDTH		128		//Screen width, MUST BE multiple of 8
 	#define		TV_HEIGHT		96		//Screen height
@@ -93,10 +89,12 @@
 /*							OTHER DEFINITIONS															 */
 /*********************************************************************************************************/
 
-	#define     BUTTON_GLITCHES     50      //Minimum value to validate a click
-	#define     BUTTON_CLICK        600     //Minimum value for Click
-	#define     BUTTON_HOLD         3000    //Minimum value for Hold
-	#define     BUTTON_HOLDLONG     4000    //Minimum value for Hold Long
+	#define		beep_Confirmation()		beep(20);delay(200);beep(20)	//Confirmation Sequence
+
+	#define     BUTTON_GLITCHES			50      //Minimum value to validate a click
+	#define     BUTTON_CLICK			600     //Minimum value for Click
+	#define     BUTTON_HOLD				3000    //Minimum value for Hold
+	#define     BUTTON_HOLDLONG			4000    //Minimum value for Hold Long
 	
 	enum stateButton
 	{

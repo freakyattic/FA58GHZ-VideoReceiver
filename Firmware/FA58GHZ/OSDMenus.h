@@ -49,6 +49,8 @@
 /*				DEFINITIONS	        																	 */
 /*********************************************************************************************************/	
 
+	#define		MENU_TIMEOUT		5000		//Timeout time
+
 	enum OSDSTATES
 	{
 		OSDs_Off,
@@ -62,6 +64,10 @@
 		
 		OSDs_VideoInput,
 		OSDs_VideoInputUpdate,
+		
+		OSDs_RFManual,
+		OSDs_RFManualUpdate0,
+		OSDs_RFManualUpdate1,
 	};
 
 
