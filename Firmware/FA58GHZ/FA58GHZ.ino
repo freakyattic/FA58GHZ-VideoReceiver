@@ -121,7 +121,6 @@ void setup ( void )
 
 	//RF Module ini
 		RF_Ini(eep_RFchannel);
-		RF_ChannelSet(0x15);
 
 	// OSD Initialization
 		OSD_Ini();

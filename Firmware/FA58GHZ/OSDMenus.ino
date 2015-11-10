@@ -40,7 +40,7 @@
 	
 	uint8_t			_selMenu, _selMenuPrev, _selMenuMax;	//selected menu
 	
-	unsigned long	_millisMenu, _millisRSSI;
+	unsigned long	_millisMenu, _millisRSSI, _millisSearch;
 
 /*********************************************************************************************************/
 /*							PROTOTYPES																	 */
@@ -77,7 +77,9 @@
 
 	void	OSD_Tasks	( void )
 	{
-		uint8_t		_val0;
+		uint8_t				_val0;
+		static uint8_t		_prevIndex;
+		static uint8_t		_autoInc;
 		
 		switch(OSD_State)
 		{
@@ -180,7 +182,7 @@
 					SelectedMenu_Next();
 				}
 					
-				if(isbuttonMode_Click())
+				if(isbuttonMode_Click() | isbuttonNext_Hold())
 				{
 					beep_Confirmation();
 					_millisMenu = millis()+MENU_TIMEOUT;
@@ -298,86 +300,139 @@
 				{
 					OSD_State = OSDs_RFManualUpdate1;
 					
-					//Print the menu
+				//Print the menu
 					TV.clear_screen();
 					
-					//Box
+				//Box
 					TV.draw_rect(0,0,TV_WIDTH-1,35,1);
 					TV.select_font(font4x6);
 					TV.printPGM(20,3,PSTR("RF Channel Selection"));
 					TV.draw_line(0,11,TV_WIDTH-1,11,1);
 					
-					//Channel
+				//Channel
 					TV.select_font(font6x8);
 					TV.printPGM(5,15,PSTR("Channel: "));
-					TV.printPGM(5,25,PSTR("RSSI: "));
+					TV.printPGM(5,25,PSTR("RSSI"));
 					
-					//Draw Spectrum Box
-					TV.draw_rect(21,37,84,50,1);
+				//Draw Spectrum Box
+					TV.draw_rect(11,37,104,50,1);
 					TV.select_font(font4x6);
-					TV.set_cursor(15,90);
+					TV.set_cursor(5,90);
 					TV.print((int)RF_GetFrequencyFromChannel(0x34));	//Low Freq
 					TV.set_cursor(55,90);
 					TV.print((int)RF_GetFrequencyFromChannel(0x24));	//Mid Freq
-					TV.set_cursor(95,90);
+					TV.set_cursor(105,90);
 					TV.print((int)RF_GetFrequencyFromChannel(0x38));	//Mid Freq
 					
-					//Update screen Values
+				//Update screen Values
 					TV.select_font(font6x8);
 					TV.set_cursor(60, 15);
 					TV.print(RF_ChannelGet(),HEX);
 					TV.print(" - ");
 					TV.print((int)RF_GetFrequencyFromChannel(RF_ChannelGet()));
 					
-					_millisRSSI = millis();
-					_millisMenu = millis()+60000;
+					_prevIndex = 255;
+					_autoInc = 0;	
+					_millisSearch = millis();
+					_millisRSSI   = millis();
+					_millisMenu   = millis()+60000;
 				}
 				break;
 			case OSDs_RFManualUpdate1:
 			
-				//Update RSSI 4 Hz
+			//Update RSSI
 				if( millis() > _millisRSSI)
 				{
 					_millisRSSI = millis()+250;
-					TV.set_cursor(38, 25);
-					TV.print((unsigned long)RF_RSSIGet());
-					TV.print(" - ");
-					TV.print((unsigned long)RF_RSSIGet_Raw());
+					uint16_t _rssi = (unsigned long)RF_RSSIGet();
+					
+					//Update Bar and text
+					TV.draw_rect( 33, 25, 75, 6, 1, 0);
+					TV.draw_rect( 33, 25, map(_rssi, 0, 100, 0, 75), 6, 1, 1);
+					TV.set_cursor(112, 25);
+					TV.print(_rssi);
+					
+					//Spectrum bar
+					uint8_t _index = map(RF_FrequencyGet(), 5645, 5945, 0, 100);
+					TV.draw_line(13 + _index, 85, 13 + _index, 39, 0);	//Clear
+					TV.draw_line(13 + _index, 85, 13 + _index, 39 + map(_rssi,0,100,46,0), 1);	//Draw
+					
+					//Frequency and Cursor
+					if(_prevIndex != _index)
+					{
+						//Update screen Values
+						TV.select_font(font6x8);
+						TV.set_cursor(60, 15);
+						TV.print(RF_ChannelGet(),HEX);
+						TV.print(" - ");
+						TV.print((int)RF_GetFrequencyFromChannel(RF_ChannelGet()));
+						
+						//Cursor
+						if(_prevIndex != 255)
+						{	
+							TV.set_pixel(13 + _prevIndex, 37, 2);
+							TV.set_pixel(13 + _prevIndex, 87, 2);
+						}
+							
+						TV.set_pixel(13 + _index, 37, 2);
+						TV.set_pixel(13 + _index, 87, 2);
+						_prevIndex = _index;
+					}
 				}
 				
-				if(isbuttonNext_Click())	//Next Channel
+			// Tasks Search
+				if(_autoInc & (millis()>_millisSearch) )
+				{
+					_millisSearch = millis() + 120;
+					
+					RF_ChannelInc();
+					delay(50);	//some time to stabilize
+					
+					//Stop autosearch 75%
+					if( RF_RSSIGet() >= 75)
+					{
+						_autoInc = 0;
+						delay(20);
+						beep(15);
+						delay(20);
+						beep(15);
+					}
+				}
+				
+			//Next channel
+				if(isbuttonNext_Click())
 				{
 					_millisMenu = millis()+60000;
 					
 					RF_ChannelInc();
-					delay(100);	//some time to stabilize
-					
-					//Update screen Values
-					TV.select_font(font6x8);
-					TV.set_cursor(60, 15);
-					TV.print(RF_ChannelGet(),HEX);
-					TV.print(" - ");
-					TV.print((int)RF_GetFrequencyFromChannel(RF_ChannelGet()));
+					delay(10);	//some time to stabilize
 				}
-									
-				if(isbuttonMode_Click())	//Exit
+				
+			//Search				
+				if(isbuttonNext_Hold())
+					_autoInc ^= 1;	//toggle the autoInc/search
+					
+			//Exit									
+				if(isbuttonMode_Click())
+				{
+					RF_ChannelSet(eep_RFchannel);	//Cancel the modifications
 					OSD_State = OSDs_Main;	
-
-				if(isbuttonMode_Hold())		//Save Current
+				}
+				
+			//Save and Exit
+				if(isbuttonMode_Hold())		
 				{
 					beep_Confirmation();
 					eep_RFchannel = RF_ChannelGet();	//Save the channel
 					Save_EEPROM();
 					OSD_State = OSDs_Main;
 				}
-				
 					
-				//Timeout - No user input
+			//Timeout - No user input
 				if(millis() > _millisMenu)
 					OSD_State = OSDs_Main;	
 				break;
 		}
-	
 	
 	}
 	
