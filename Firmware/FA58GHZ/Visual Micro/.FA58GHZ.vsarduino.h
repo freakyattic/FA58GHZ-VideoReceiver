@@ -22,7 +22,6 @@ extern "C" void __cxa_pure_virtual() {;}
 
 void setup ( void );
 //
-uint8_t		Read_RSSI	( void );
 void beep(uint16_t time);
 void	_debug	( const __FlashStringHelper *description );
 void	Load_EEPROM		( void );
@@ -51,6 +50,7 @@ uint8_t		RF_ChannelGetIndex	( void );
 void		RF_ChannelInc		( void );
 void		RF_ChannelDec		( void );
 uint16_t	RF_FrequencyGet		( void );
+void	RF_FrequencyNext	( void );
 uint16_t	RF_GetFrequencyFromChannel	( uint8_t	channel );
 uint16_t		RF_RSSIGet			( void );
 uint16_t	RF_RSSIGet_Raw		( void );

@@ -41,6 +41,7 @@
 	uint8_t			_selMenu, _selMenuPrev, _selMenuMax;	//selected menu
 	
 	unsigned long	_millisMenu, _millisRSSI, _millisSearch;
+	uint16_t		_spectrumRSSI_Max, _spectrumRSSI_Min;
 
 /*********************************************************************************************************/
 /*							PROTOTYPES																	 */
@@ -70,7 +71,7 @@
 
 		TV.clear_screen();
 		
-		OSD_State = OSDs_Main;		//Start with the Intro screen.
+		OSD_State = OSDs_Intro;		//Start with the Intro screen.
 		
 		_debug(F("OSD: OSD initialized"));
 	}
@@ -83,13 +84,12 @@
 		
 		switch(OSD_State)
 		{
-	//Off
+//Off ------------------------------------------------------
 			case OSDs_Off:
 				_debug(F("OSD: OSD off"));
 				Clear_ButtonStates();
 				VideoSelect(eep_VideoInput+1); //Select the Video input and switch off OSD
 				TV.pause();	//switch off OSD
-				beep(80);
 				OSD_State = OSDs_OffUpdate;
 				break;
 			case OSDs_OffUpdate:
@@ -106,7 +106,7 @@
 					
 				break;
 				
-	//Intro - Welcome screen
+//Intro - Welcome screen------------------------------------------------------
 			case OSDs_Intro:
 			
 				Clear_ButtonStates();
@@ -123,26 +123,39 @@
 				TV.printPGM(32, 50,PSTR("FreakyAttic.com"));
 				
 				//Place information about the channel selected.
-				TV.draw_line(0,74, TV_WIDTH-1, 74, 1);
-				TV.printPGM(12, 82,PSTR("Channel:"));
-				TV.set_cursor(50, 82);
-				TV.print(eep_RFchannel,HEX);
+				TV.draw_line(0,84, TV_WIDTH-1, 84, 1);
+				TV.printPGM(12, 87,PSTR("Channel:"));
+				TV.set_cursor(50, 87);
+				TV.print(RF_ChannelGet(),HEX);
 				TV.printPGM(PSTR(" - "));
-				TV.print(RF_GetFrequencyFromChannel(eep_RFchannel));
-				TV.printPGM(PSTR(" - "));
-				TV.print(Read_RSSI(), DEC);
-				TV.printPGM(PSTR("%"));
+				TV.print(RF_FrequencyGet());
+				TV.printPGM(PSTR(" -"));
 				
+				_millisRSSI = millis();
 				_millisMenu = millis()+MENU_TIMEOUT;
 				OSD_State = OSDs_IntroUpdate;
 				break;
 			case OSDs_IntroUpdate:
-				if(millis() > _millisMenu)
+			
+				if((millis() > _millisMenu)|isbutton_AnyPressed())
 					OSD_State = OSDs_Main;
+				
+				//Update RSSI
+				if(millis() > _millisRSSI)
+				{
+					_millisRSSI = millis() + 250;
+					TV.set_cursor(100, 87);
+					TV.printPGM(PSTR("     "));	//Clean
+					TV.set_cursor(100, 87);
+					TV.print(RF_RSSIGet(), DEC);
+					TV.printPGM(PSTR("%"));
+				}
 				break;				
 				
-	//Main Screen				
+//Main Screen	------------------------------------------------------
 			case OSDs_Main:
+			
+				RF_ChannelSet(eep_RFchannel);	//Select the saved channel
 				
 				Clear_ButtonStates();
 				VideoSelect(0);		//Select OSD			
@@ -160,28 +173,51 @@
 				TV.printPGM(5,30,PSTR("RF Channel Setup"));
 				TV.printPGM(5,40,PSTR("RF Spectrum"));
 				TV.printPGM(5,50,PSTR("Fan Output"));
-				TV.printPGM(5,60,PSTR("RSSI Calibration"));
-				TV.printPGM(5,70,PSTR("Exit"));
+				TV.printPGM(5,60,PSTR("Exit"));
 				
-				SelectedMenu_Ini(5,6);
+				//Place information about the channel selected at the bottom
+				TV.select_font(font4x6);
+				TV.draw_line(0,84, TV_WIDTH-1, 84, 1);
+				TV.printPGM(12, 87,PSTR("Channel:"));
+				TV.set_cursor(50, 87);
+				TV.print(RF_ChannelGet(),HEX);
+				TV.printPGM(PSTR(" - "));
+				TV.print(RF_FrequencyGet());
+				TV.printPGM(PSTR(" -"));
 				
+				SelectedMenu_Ini(4,5);
+				_millisRSSI = millis();
 				_millisMenu = millis()+MENU_TIMEOUT;
 				OSD_State = OSDs_MainUpdate;
 				break;
 			case OSDs_MainUpdate:
 				
-				//Timeout - No user input
+			//Timeout - No user input
 				if(millis() > _millisMenu)
 				{
 					OSD_State = OSDs_Off;
 				}
 				
+			//Update RSSI
+				if(millis() > _millisRSSI)
+				{
+					TV.select_font(font4x6);
+					_millisRSSI = millis() + 250;
+					TV.set_cursor(100, 87);
+					TV.printPGM(PSTR("     "));	//Clean
+					TV.set_cursor(100, 87);
+					TV.print(RF_RSSIGet(), DEC);
+					TV.printPGM(PSTR("%"));
+				}
+				
+			//Next Menu
 				if(isbuttonNext_Click())
 				{
 					_millisMenu = millis()+MENU_TIMEOUT;
 					SelectedMenu_Next();
 				}
 					
+			//Menu Selected
 				if(isbuttonMode_Click() | isbuttonNext_Hold())
 				{
 					beep_Confirmation();
@@ -195,25 +231,19 @@
 							OSD_State = OSDs_RFManual;
 							break;						
 						case 2:		//RF Spectrum
-							delay(1000);
-							beep(19);
-							RF_ChannelSet(0x15);
+							OSD_State = OSDs_RFSpectrum;
 							break;
 						case 3:		//Fan Output
-							delay(1000);
-							beep(19);
-							RF_ChannelSet(0x58);
+							
 							break;
-						case 4:		//RSSI Calibration
-							break;
-						case 5:		//Exit
+						case 4:		//Exit
 							OSD_State = OSDs_Off;
 							break;	
 					}
 				}
 				break;
 				
-	//Video Input selection		
+//Video Input selection	------------------------------------------------------	
 			case OSDs_VideoInput:
 			
 				Clear_ButtonStates();
@@ -253,7 +283,7 @@
 					SelectedMenu_Next();
 				}
 				
-				if(isbuttonMode_Click())
+				if(isbuttonMode_Click()|isbuttonNext_Hold())
 				{
 					_millisMenu = millis()+MENU_TIMEOUT;
 					_val0 = SelectedMenu_Get();
@@ -271,11 +301,16 @@
 					eep_VideoInput = _val0;
 					Save_EEPROM();
 					beep_Confirmation();
+					
+					TV.set_cursor(40, 80);
+					TV.printPGM(PSTR("SAVED !!!"));
+					delay(1500);
+					
 					OSD_State = OSDs_Main;
 				}
 				break;	
 				
-//OSD RF Manual				
+//OSD RF Manual	------------------------------------------------------			
 			case OSDs_RFManual:
 				Clear_ButtonStates();
 				TV.resume();
@@ -291,6 +326,9 @@
 				TV.printPGM(12,60,PSTR("     Hold : Save"));
 				
 				TV.printPGM(5,90,PSTR("Press any to continue..."));
+				
+				RF_ChannelSet(eep_RFchannel);
+				
 				_millisMenu = millis()+5000;
 				OSD_State = OSDs_RFManualUpdate0;
 				break;
@@ -335,7 +373,7 @@
 					_autoInc = 0;	
 					_millisSearch = millis();
 					_millisRSSI   = millis();
-					_millisMenu   = millis()+60000;
+					_millisMenu   = millis()+MENU_TIMEOUTLONG;
 				}
 				break;
 			case OSDs_RFManualUpdate1:
@@ -347,9 +385,11 @@
 					uint16_t _rssi = (unsigned long)RF_RSSIGet();
 					
 					//Update Bar and text
-					TV.draw_rect( 33, 25, 75, 6, 1, 0);
-					TV.draw_rect( 33, 25, map(_rssi, 0, 100, 0, 75), 6, 1, 1);
-					TV.set_cursor(112, 25);
+					TV.draw_rect( 30, 25, 75, 6, 1, 0);
+					TV.draw_rect( 30, 25, map(_rssi, 0, 100, 0, 75), 6, 1, 1);
+					
+					TV.printPGM(108, 25,PSTR("   "));	//Clean
+					TV.set_cursor(108, 25);
 					TV.print(_rssi);
 					
 					//Spectrum bar
@@ -402,7 +442,7 @@
 			//Next channel
 				if(isbuttonNext_Click())
 				{
-					_millisMenu = millis()+60000;
+					_millisMenu = millis()+MENU_TIMEOUTLONG;
 					
 					RF_ChannelInc();
 					delay(10);	//some time to stabilize
@@ -425,12 +465,148 @@
 					beep_Confirmation();
 					eep_RFchannel = RF_ChannelGet();	//Save the channel
 					Save_EEPROM();
+					
+					TV.set_cursor(40, 45);
+					TV.printPGM(PSTR("SAVED !!!"));
+					delay(1500);
+					
 					OSD_State = OSDs_Main;
 				}
 					
 			//Timeout - No user input
 				if(millis() > _millisMenu)
 					OSD_State = OSDs_Main;	
+				break;
+				
+//RF Spectrum	------------------------------------------------------			
+			case OSDs_RFSpectrum:
+			
+				Clear_ButtonStates();
+				TV.resume();
+				TV.clear_screen();
+				
+				TV.draw_rect(0,0,TV_WIDTH-1, 11,2);
+				TV.select_font(font4x6);
+				TV.printPGM(20,3,PSTR("RF spectrum analyzer"));
+				
+				//Draw Spectrum Box
+				TV.draw_rect(11,15,104,70,1);
+				TV.select_font(font4x6);
+				TV.set_cursor(5,89);
+				TV.print((int)RF_GetFrequencyFromChannel(0x34));	//Low Freq
+				TV.set_cursor(55,89);
+				TV.print((int)RF_GetFrequencyFromChannel(0x24));	//Mid Freq
+				TV.set_cursor(105,89);
+				TV.print((int)RF_GetFrequencyFromChannel(0x38));	//Mid Freq
+
+				_spectrumRSSI_Min = eep_RSSIMax;
+				_spectrumRSSI_Max = eep_RSSIMin;
+				
+				_prevIndex = 255;
+				_millisSearch = millis();
+				_millisMenu = millis() + MENU_TIMEOUTLONG;
+				OSD_State = OSDs_RFSpectrumUpdate;
+				break;
+				
+			case OSDs_RFSpectrumUpdate:
+			
+				if(millis() > _millisSearch)
+				{
+					_millisSearch = millis() + 60;
+					
+					RF_FrequencyNext();
+					delay(40);	//some time to stabilize
+					
+					uint16_t _rssi = (unsigned long)RF_RSSIGet();
+					
+					//Spectrum bar
+					uint8_t _index = map(RF_FrequencyGet(), 5645, 5945, 0, 100);
+					TV.draw_line(13 + _index, 85, 13 + _index, 17, 0);	//Clear
+					TV.draw_line(13 + _index, 85, 13 + _index, 17 + map(_rssi,0,100,66,0), 1);	//Draw
+					
+					//Frequency and Cursor
+					if(_prevIndex != _index)
+					{
+						//Cursor
+						if(_prevIndex != 255)
+						{
+							TV.set_pixel(13 + _prevIndex, 15, 2);
+							TV.set_pixel(13 + _prevIndex, 85, 2);
+						}
+						
+						TV.set_pixel(13 + _index, 15, 2);
+						TV.set_pixel(13 + _index, 85, 2);
+						_prevIndex = _index;
+					}
+					
+					//Detect Max-Min RSSI Values
+					_rssi = (unsigned long)RF_RSSIGet_Raw();
+					
+					if(_rssi < _spectrumRSSI_Min)
+						_spectrumRSSI_Min = _rssi;
+					if(_rssi > _spectrumRSSI_Max)
+						_spectrumRSSI_Max = _rssi;
+				}
+				
+				if(isbuttonMode_Hold())
+				{
+					Clear_ButtonStates();
+					TV.resume();
+					TV.clear_screen();
+					
+					TV.draw_rect(0,0,TV_WIDTH-1, 11,2);
+					TV.select_font(font4x6);
+					TV.printPGM(20,3,PSTR("RSSI Calibration"));
+
+					TV.select_font(font6x8);					
+					TV.set_cursor(5, 20);
+					TV.printPGM(PSTR("Saved   : "));
+					TV.print((int)eep_RSSIMin);
+					TV.printPGM(PSTR(" - "));
+					TV.println((int)eep_RSSIMax);
+					
+					TV.set_cursor(5, 30);
+					TV.printPGM(PSTR("Detected: "));
+					TV.print((int)_spectrumRSSI_Min);
+					TV.printPGM(PSTR(" - "));
+					TV.println((int)_spectrumRSSI_Max);
+					
+					TV.set_cursor(10, 50);
+					TV.printPGM(PSTR("Hold Mode to Save"));
+					TV.set_cursor(10, 60);
+					TV.printPGM(PSTR("any to cancel"));
+					
+					_millisMenu = millis() + MENU_TIMEOUTLONG;	
+					OSD_State = OSDs_RFSpectrumRSSI;
+				}
+				
+				//Timeout - No user input
+				if((millis() > _millisMenu)|isbutton_AnyPressed())
+					OSD_State = OSDs_Main;
+				
+				break;
+			case OSDs_RFSpectrumRSSI:
+
+				//Save parameters
+				if(isbuttonMode_Hold())
+				{
+					eep_RSSIMin = _spectrumRSSI_Min;
+					eep_RSSIMax = _spectrumRSSI_Max;
+					
+					Save_EEPROM();
+					beep_Confirmation();
+					
+					TV.set_cursor(40, 80);
+					TV.printPGM(PSTR("SAVED !!!"));
+					delay(1500);
+					
+					OSD_State = OSDs_Main;
+				}
+				
+				//Timeout - No user input
+				if((millis() > _millisMenu)|isbutton_AnyPressed())
+					OSD_State = OSDs_Main;
+					
 				break;
 		}
 	

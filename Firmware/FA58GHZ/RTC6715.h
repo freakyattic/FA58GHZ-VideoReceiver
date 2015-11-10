@@ -85,6 +85,7 @@
 	void		RF_ChannelDec		( void );
 		
 	uint16_t	RF_FrequencyGet		( void );	//Current frequency
+	void		RF_FrequencyNext	( void );	//change to next in the channelFreqOrder
 	
 	uint16_t	RF_GetFrequencyFromChannel	( uint8_t	channel );	//Return the freq. from a channel code
 	

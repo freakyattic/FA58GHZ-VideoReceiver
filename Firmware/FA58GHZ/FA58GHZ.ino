@@ -157,13 +157,6 @@ void loop()
 /*		FUNCTIONS									 */
 /*****************************************************/
 
-//Return in Percentage
-uint8_t		Read_RSSI	( void )
-{
-	return 51;
-	//return map( 250, eep_RSSIMin, eep_RSSIMax, 0, 100 );
-}
-
 void beep(uint16_t time)
 {
 	unsigned long  targetms;
@@ -271,29 +264,27 @@ void	VideoSelect		( uint8_t _input)
 	switch(_input)
 	{
 		case 1:			//RF Module 1
+			RF_ChannelSet(eep_RFchannel);	//Set saved channel
 			OSDScreen_Off();
 			digitalWrite(VideoSel0, HIGH);
 			digitalWrite(VideoSel1, LOW);
-			_debug(F("VideoMUX: Input 1"));
 			break;
 		case 2:			//RF Module 2
+			RF_ChannelSet(eep_RFchannel);	//Set saved channel
 			OSDScreen_Off();
 			digitalWrite(VideoSel0, LOW);
 			digitalWrite(VideoSel1, HIGH);
-			_debug(F("VideoMUX: Input 2"));
 			break;
 		case 3:			//Ext Video
 			OSDScreen_Off();
 			digitalWrite(VideoSel0, HIGH);
 			digitalWrite(VideoSel1, HIGH);
-			_debug(F("VideoMUX: Input 3"));
 			break;
 		default:
 		case 0:			//OSD
 			OSDScreen_Main();
 			digitalWrite(VideoSel0, LOW);
 			digitalWrite(VideoSel1, LOW);
-			_debug(F("VideoMUX: Input 0"));
 			break;
 	}
 }

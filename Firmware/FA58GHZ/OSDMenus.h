@@ -49,7 +49,8 @@
 /*				DEFINITIONS	        																	 */
 /*********************************************************************************************************/	
 
-	#define		MENU_TIMEOUT		5000		//Timeout time
+	#define		MENU_TIMEOUT		10000		//Timeout time
+	#define		MENU_TIMEOUTLONG	40000		//Timeout time
 
 	enum OSDSTATES
 	{
@@ -68,6 +69,10 @@
 		OSDs_RFManual,
 		OSDs_RFManualUpdate0,
 		OSDs_RFManualUpdate1,
+		
+		OSDs_RFSpectrum,
+		OSDs_RFSpectrumUpdate,
+		OSDs_RFSpectrumRSSI,
 	};
 
 

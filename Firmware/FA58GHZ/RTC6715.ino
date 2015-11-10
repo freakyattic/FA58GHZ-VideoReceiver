@@ -38,7 +38,8 @@
 /*********************************************************************************************************/
 
 	uint8_t		currentChannel = 0;
-	uint16_t	currentFrequency = 0;		
+	uint16_t	currentFrequency = 0;
+	uint8_t		currentFrequencyIndex = 0;		
 
 /*********************************************************************************************************/
 /*						SPI DEFINITIONS																	 */
@@ -169,6 +170,19 @@
 	uint16_t	RF_FrequencyGet		( void )	//Current frequency
 	{
 		return currentFrequency;	
+	}
+	
+	void	RF_FrequencyNext	( void )	//Next in the channelFreqOrder
+	{
+		if(++currentFrequencyIndex >= MAX_RF_CHANNELS)
+			currentFrequencyIndex = 0;
+		
+		uint16_t _channel = pgm_read_byte_near( channelFreqOrder + (uint8_t)currentFrequencyIndex);
+		
+		//Convert the index to channel code
+		uint8_t _high = (_channel/8);
+		uint8_t _low = _channel - (_high*8);
+		RF_ChannelSet((((++_high)<<4)&0xF0)|((++_low)&0x0F));
 	}
 
 	uint16_t	RF_GetFrequencyFromChannel	( uint8_t	channel )
