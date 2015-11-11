@@ -38,7 +38,7 @@
 	TVout			TV;
 	OSDSTATES		OSD_State;		//Start with main OSD
 	
-	uint8_t			_selMenu, _selMenuPrev, _selMenuMax;	//selected menu
+	uint8_t			_selMenu, _selMenuPrev, _selMenuMax, _selWidth;	//selected menu
 	
 	unsigned long	_millisMenu, _millisRSSI, _millisSearch;
 	uint16_t		_spectrumRSSI_Max, _spectrumRSSI_Min;
@@ -48,6 +48,7 @@
 /*********************************************************************************************************/
 
 	void	SelectedMenu_Ini	( uint8_t _selected, uint8_t _maxItems);
+	void	SelectedMenu_Ini	( uint8_t _selected, uint8_t _maxItems,  uint8_t _width);
 	void	SelectedMenu_Next	();
 	uint8_t	SelectedMenu_Get	();
 	
@@ -81,6 +82,8 @@
 		uint8_t				_val0;
 		static uint8_t		_prevIndex;
 		static uint8_t		_autoInc;
+		static uint8_t		_fanInc, _fanPower, _fanMode, _fanUpdate;
+		
 		
 		switch(OSD_State)
 		{
@@ -95,7 +98,7 @@
 			case OSDs_OffUpdate:
 			
 				//Enter Setup
-				if( isbuttonMode_Hold() | isbuttonMode_HoldLong())
+				if( isbuttonMode_Hold() | isbuttonMode_HoldLong() | isbuttonNext_Hold())
 					OSD_State = OSDs_Main;
 				
 				////Select next channel
@@ -234,7 +237,7 @@
 							OSD_State = OSDs_RFSpectrum;
 							break;
 						case 3:		//Fan Output
-							
+							OSD_State = OSDs_FANMenu;
 							break;
 						case 4:		//Exit
 							OSD_State = OSDs_Off;
@@ -608,6 +611,173 @@
 					OSD_State = OSDs_Main;
 					
 				break;
+
+//FAN Options	------------------------------------------------------				
+			case OSDs_FANMenu:
+			
+				Clear_ButtonStates();
+				TV.resume();
+				TV.clear_screen();
+				
+				TV.draw_rect(0,0,TV_WIDTH-1, TV_HEIGHT-1, 1);
+				TV.select_font(font4x6);
+				TV.printPGM(20,3,PSTR("FAN Options"));
+				TV.draw_line(0,11,TV_WIDTH-1,11,2);
+				
+				//Menu
+				TV.select_font(font6x8);
+				TV.printPGM(5,20,PSTR("Timer Inc. :"));
+				TV.printPGM(5,30,PSTR("Fan Speed  :"));
+				TV.printPGM(5,40,PSTR("Fan Mode   :"));
+				TV.printPGM(5,50,PSTR("Exit"));
+
+				//Mark the selected Input
+				SelectedMenu_Ini(3, 4, 75);
+				
+				_fanInc = eep_FANTimeInc;	//Load saved parameters
+				_fanPower = eep_FANPower;
+				_fanMode = eep_FANMode;
+				
+				_fanUpdate = 1;		//Update screen parametes
+					
+				_millisMenu = millis() + MENU_TIMEOUT;
+				OSD_State = OSDs_FANMenuUpdate;
+				break;
+				
+			case OSDs_FANMenuUpdate:
+			
+			//Next menu 
+				if(isbuttonNext_Click())
+				{
+					_millisMenu = millis()+MENU_TIMEOUT;
+					SelectedMenu_Next();
+				}
+			
+			//Save Parameters if exit with mode hold
+				if(SelectedMenu_Get()==3)
+				{
+					if(isbuttonMode_Hold()|isbuttonNext_Hold())
+					{
+						//Save eeprom parameters
+						eep_FANTimeInc = _fanInc;	//Load saved parameters
+						eep_FANPower = _fanPower;
+						eep_FANMode = _fanMode;
+						
+						Save_EEPROM();
+						beep_Confirmation();
+						
+						TV.set_cursor(40, 80);
+						TV.printPGM(PSTR("SAVED !!!"));
+						delay(1500);
+						
+						_millisFAN = millis();		//Stop FAN, so new parameters can be used
+						_millisFANMode = millis();
+						
+						OSD_State = OSDs_Main;
+					}
+				}
+			
+			//Menu pressed
+				if(isbuttonMode_Click()|isbuttonNext_Hold())
+				{
+
+					switch(SelectedMenu_Get())
+					{
+						case 0:			//Fan Inc
+							if(++_fanInc >= 5)
+								_fanInc=0;
+							break;
+						case 1:			//Fan Power
+							if(++_fanPower >= 5)
+								_fanPower=0;
+							break;
+						case 2:			//Fan Mode
+							if(++_fanMode >= 5)
+								_fanMode=0;
+							break;						
+						default:		//Exit
+						case 3:
+							OSD_State = OSDs_Main;
+							break;
+					}
+					
+					_fanUpdate = 1;		//Update screen parametes
+					_millisMenu = millis()+MENU_TIMEOUT;					
+				}						
+				
+			//Update Screen values.
+				if(_fanUpdate)
+				{
+					_fanUpdate = 0;
+			
+					//FAN INC
+					TV.printPGM(80,20,PSTR("      "));//Clean
+					switch(_fanInc)
+					{
+						case 0:
+							TV.printPGM(80,20,PSTR("1 min"));
+							break;
+						case 1:
+							TV.printPGM(80,20,PSTR("2 min"));
+							break;
+						case 2:
+							TV.printPGM(80,20,PSTR("5 min"));
+							break;
+						case 3:
+							TV.printPGM(80,20,PSTR("8 min"));
+							break;
+						case 4:
+							TV.printPGM(80,20,PSTR("10 min"));
+							break;
+					}
+					
+					//FAN POWER
+					TV.printPGM(80,30,PSTR("     "));//Clean
+					switch(_fanPower)
+					{
+						case 0:
+							TV.printPGM(80,30,PSTR("100 %"));
+							break;
+						case 1:
+							TV.printPGM(80,30,PSTR("80 %"));
+							break;
+						case 2:
+							TV.printPGM(80,30,PSTR("60 %"));
+							break;
+						case 3:
+							TV.printPGM(80,30,PSTR("40 %"));
+							break;
+						case 4:
+							TV.printPGM(80,30,PSTR("20 %"));
+							break;
+					}
+					
+					//FAN Mode
+					TV.printPGM(80,40,PSTR("      "));//Clean
+					switch(_fanMode)
+					{
+						case 0:
+						TV.printPGM(80,40,PSTR("Cont."));
+						break;
+						case 1:
+						TV.printPGM(80,40,PSTR("5 sec"));
+						break;
+						case 2:
+						TV.printPGM(80,40,PSTR("10 sec"));
+						break;
+						case 3:
+						TV.printPGM(80,40,PSTR("20 sec"));
+						break;
+						case 4:
+						TV.printPGM(80,40,PSTR("30 sec"));
+						break;
+					}
+				}
+			
+				//Timeout - No user input
+				if(millis() > _millisMenu)
+					OSD_State = OSDs_Main;
+				break;
 		}
 	
 	}
@@ -626,12 +796,18 @@
 
 	void	SelectedMenu_Ini ( uint8_t _selected, uint8_t _maxItems)
 	{
+		SelectedMenu_Ini( _selected, _maxItems, 123);
+	}
+
+	void	SelectedMenu_Ini ( uint8_t _selected, uint8_t _maxItems, uint8_t _width)
+	{
 		_selMenu = _selected;
 		_selMenuPrev = _selMenu;
 		_selMenuMax = _maxItems;
+		_selWidth = _width;
 		
 		//Select Menu
-		TV.draw_rect(2,(18 + _selected*10),TV_WIDTH-5,10, 1, 2);
+		TV.draw_rect(2,(18 + _selected*10), _selWidth,10, 1, 2);
 	}
 	
 	void	SelectedMenu_Next ()
@@ -640,10 +816,10 @@
 			_selMenu = 0;
 		
 		//DeSelect Previous
-		TV.draw_rect(2,(18 + _selMenuPrev*10),TV_WIDTH-5,10, 0, 2);
+		TV.draw_rect(2,(18 + _selMenuPrev*10), _selWidth,10, 0, 2);
 		
 		//Select Menu
-		TV.draw_rect(2,(18 + _selMenu*10),TV_WIDTH-5,10, 1, 2);
+		TV.draw_rect(2,(18 + _selMenu*10), _selWidth,10, 1, 2);
 		
 		_selMenuPrev = _selMenu;
 	}

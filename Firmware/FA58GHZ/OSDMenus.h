@@ -73,6 +73,9 @@
 		OSDs_RFSpectrum,
 		OSDs_RFSpectrumUpdate,
 		OSDs_RFSpectrumRSSI,
+		
+		OSDs_FANMenu,
+		OSDs_FANMenuUpdate,
 	};
 
 

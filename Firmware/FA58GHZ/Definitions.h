@@ -37,10 +37,10 @@
 /*							CONFIGURATIONS																 */
 /*********************************************************************************************************/
 
-	#define		FIRMWAREVER		"1.0b"	// Firmware Version
+	#define		FIRMWAREVER		"1.01b"	// Firmware Version
 	#define		EEPROM_VER		0x31	// EEPROM Data storage version
 
-	#define		DEBUG		// Uncomment for serial debug.
+	//#define		DEBUG		// Uncomment for serial debug.
 
 	#define		TV_WIDTH		128		//Screen width, MUST BE multiple of 8
 	#define		TV_HEIGHT		96		//Screen height
@@ -79,7 +79,7 @@
 	#define led				13	
 
 //External Fan Controller
-	#define FanON			9	//could be PWM controlled
+	#define pinFan			5	//could be PWM controlled
 	
 		
 //Voltage Input monitor	
@@ -103,5 +103,19 @@
 		sbutton_hold,
 		sbutton_holdlong,
 	};
-
+	
+	//#define		FANPOWER_100		0	//PWM values for FAN power
+	//#define		FANPOWER_80			51
+	//#define		FANPOWER_60			102
+	//#define		FANPOWER_40			153
+	//#define		FANPOWER_20			204
+	//#define		FANPOWER_0			255
+	
+	#define		FANPOWER_100		255	//PWM values for FAN power
+	#define		FANPOWER_80			204
+	#define		FANPOWER_60			153
+	#define		FANPOWER_40			102
+	#define		FANPOWER_20			51
+	#define		FANPOWER_0			0
+	
 #endif /* DEFINITIONS_H_ */

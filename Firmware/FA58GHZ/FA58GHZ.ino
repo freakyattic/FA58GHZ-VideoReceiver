@@ -4,10 +4,6 @@
 	Created: 2015-11-08 19:38:50
 	Author: FreakyAttic.com
  
-	Description XXXXXXXXXXXXXXXXXXXXXX
-	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-	XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
- 
  -------------------------------------------------------------------------------------
 	 The MIT License (MIT)
 
@@ -33,11 +29,11 @@
 	 
 */ 
 
-#include <TVout.h>
-#include <fontALL.h>
 #include <avr/pgmspace.h>
 #include <EEPROM.h>
 #include <stdint.h>
+#include <TVout.h>
+#include <fontALL.h>
 
 #include "Definitions.h"
 #include "RTC6715.h"
@@ -48,6 +44,7 @@
 /*****************************************************/
 	
 	unsigned long	_millisLED;		//LED status
+	unsigned long	_millisFAN, _millisFANMode;	
 
 	uint8_t		eep_VideoInput;		// 0: RF1, 1:RF2, 2:EXT-Video, 3:Diversity
 
@@ -104,8 +101,8 @@ void setup ( void )
 
 	
 	//External Fan
-		pinMode(FanON, OUTPUT); 
-			digitalWrite(FanON, HIGH);
+		pinMode(pinFan, OUTPUT); 
+			digitalWrite(pinFan, HIGH);
 
 	//Ini Beeping
 		for(char i = 0; i<6; i++)
@@ -128,7 +125,8 @@ void setup ( void )
 	//Finish Initialization
 		_debug(F("Board initialized ..."));
 		
-	_millisLED = millis();	//LED status					
+	_millisLED = millis();	//LED status
+	_millisFAN = millis();				
 }
 
 void loop()
@@ -139,6 +137,9 @@ void loop()
 	
 //OSD Tasks
 	OSD_Tasks();
+
+//FAN Tasks
+	FAN_Tasks();	
 	
 //LED Status
 	if(millis() > _millisLED)
@@ -522,3 +523,88 @@ void	Buttons_Tasks		( void )
 	}
 
 
+/****************************************************/
+/*		FAN Tasks									*/
+/****************************************************/
+
+void	FAN_Tasks		( void )
+{
+	static uint8_t  currentPower = FANPOWER_0+1;
+	static uint8_t  selectedPower = FANPOWER_0;
+	
+	if( millis() > _millisFAN)
+	{
+		if( currentPower != FANPOWER_0)
+		{
+			currentPower = FANPOWER_0;
+			analogWrite(pinFan, currentPower); //off
+		}
+	}
+	else
+	{
+		if( eep_FANMode == 0)	//Cont.
+		{
+			if( currentPower != selectedPower)
+			{
+				currentPower = selectedPower;
+				analogWrite(pinFan, currentPower); //Full On	
+			}
+		}
+		else
+		{
+			if( millis() > _millisFANMode)		//Fan mode
+			{
+				if( currentPower != selectedPower)
+					currentPower = selectedPower;
+				else
+					currentPower = FANPOWER_0;
+					
+				analogWrite(pinFan, currentPower);
+				
+				//Add time
+				_millisFANMode = millis();
+				switch(eep_FANMode)
+				{
+					case 1:	_millisFANMode +=  5000; break;
+					case 2:	_millisFANMode += 10000; break;
+					case 3:	_millisFANMode += 20000; break;
+					case 4:	_millisFANMode += 30000; break;
+				}
+			}
+		}
+	}
+
+//Click	- Add time
+	if(isbuttonFan_Click())
+	{
+		
+	//Increment Timer value		
+		if( millis() > _millisFAN) 
+			_millisFAN = millis();
+		switch(eep_FANTimeInc)
+		{
+			case 0:	_millisFAN +=  60000; break;
+			case 1:	_millisFAN += 120000; break;
+			case 2:	_millisFAN += 300000; break;
+			case 3:	_millisFAN += 480000; break;
+			case 4:	_millisFAN += 600000; break;
+		}
+		
+	//Obtain the selected power
+		switch(eep_FANPower)
+		{
+			case 0:	selectedPower = FANPOWER_100; break; //100%
+			case 1:	selectedPower = FANPOWER_80 ; break; //80%
+			case 2:	selectedPower = FANPOWER_60 ; break; //60%
+			case 3:	selectedPower = FANPOWER_40 ; break; //40%
+			case 4:	selectedPower = FANPOWER_20 ; break; //20%
+		}
+	}
+	
+//Hold - Stop
+	if(isbuttonFan_Hold())
+	{
+		_millisFAN = millis();
+		_millisFANMode = millis();
+	}
+}
