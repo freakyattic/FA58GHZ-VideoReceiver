@@ -13,6 +13,9 @@ This module it is going to be integrated in a FPV goggles like the Fatshark base
 
 # ---PROJECT UNDER DEVELOPMENT---
 
+# FA58GHZ Schematic
+![Intro Screen](https://github.com/freakyattic/FA58GHZ-VideoReceiver/blob/master/FA58GHZ-Schematic.png)
+
 # Few pictures
 
 ![Intro Screen](https://github.com/freakyattic/FA58GHZ-VideoReceiver/blob/master/Pictures/Screens%20Version%201.0B/Image3.jpg)
