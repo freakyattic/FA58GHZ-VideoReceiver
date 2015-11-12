@@ -40,6 +40,7 @@ uint8_t	isbuttonFan_Hold ( void );
 uint8_t	isbuttonFan_HoldLong ( void );
 uint8_t	isbutton_AnyPressed( void );
 void	FAN_Tasks		( void );
+uint16_t	BatteryVolt		( void );
 void	OSD_Ini		( void );
 void	OSD_Tasks	( void );
 void	OSDScreen_Main	( void );

@@ -56,6 +56,11 @@
 	uint8_t		eep_FANPower;		//FAN Power
 	uint8_t		eep_FANMode;		//FAN Mode
 	
+	uint8_t		eep_BattEnable;		//Battery Monitor
+	uint8_t		eep_BattType;
+	uint16_t	eep_BattCell;
+	uint16_t	epp_BattCalib;
+	
 	stateButton		_buttonMode = sbutton_idle;
 	stateButton		_buttonNext = sbutton_idle;
 	stateButton		_buttonFan  = sbutton_idle;
@@ -216,12 +221,16 @@ void	Load_EEPROM		( void )
 		
 		//Default values
 		eep_VideoInput	= 0;
-		eep_RFchannel	= 0x15;
+		eep_RFchannel	= 0x15;		//RF
 		eep_RSSIMax		= 340;
 		eep_RSSIMin		= 145;
-		eep_FANTimeInc	= 3;
+		eep_FANTimeInc	= 3;		//FAN
 		eep_FANPower	= 0;
 		eep_FANMode		= 0;
+		eep_BattEnable	= 0;		//Battery
+		eep_BattType	= 2;
+		eep_BattCell	= 3000;
+		epp_BattCalib	= 3167;
 		
 		Save_EEPROM();
 	}
@@ -234,6 +243,10 @@ void	Load_EEPROM		( void )
 	eep_FANTimeInc	= EEPROM.read(_address++);
 	eep_FANPower	= EEPROM.read(_address++);
 	eep_FANMode		= EEPROM.read(_address++);
+	eep_BattEnable	= EEPROM.read(_address++);
+	eep_BattType	= EEPROM.read(_address++);
+	eep_BattCell	= ((EEPROM.read(_address++)<<8) | (EEPROM.read(_address++)));
+	epp_BattCalib	= ((EEPROM.read(_address++)<<8) | (EEPROM.read(_address++)));
 
 	_debug(F("EEPROM: Configuration loaded"));
 }
@@ -244,18 +257,20 @@ void	Save_EEPROM		( void )
 	
 //Save Data
 	EEPROM.write(_address++,eep_VideoInput);
-	
-	EEPROM.write(_address++,eep_RFchannel);
-
+	EEPROM.write(_address++,eep_RFchannel);				//RF
 	EEPROM.write(_address++,highByte(eep_RSSIMax));	
 	EEPROM.write(_address++,lowByte(eep_RSSIMax));
-	
 	EEPROM.write(_address++,highByte(eep_RSSIMin));
 	EEPROM.write(_address++,lowByte(eep_RSSIMin));
-	
-	EEPROM.write(_address++,eep_FANTimeInc);
+	EEPROM.write(_address++,eep_FANTimeInc);			//FAN
 	EEPROM.write(_address++,eep_FANPower);
 	EEPROM.write(_address++,eep_FANMode);
+	EEPROM.write(_address++,eep_BattEnable);			//Battery
+	EEPROM.write(_address++,eep_BattType);
+	EEPROM.write(_address++,highByte(eep_BattCell));
+	EEPROM.write(_address++,lowByte(eep_BattCell));
+	EEPROM.write(_address++,highByte(epp_BattCalib));
+	EEPROM.write(_address++,lowByte(epp_BattCalib));
 
 	_debug(F("EEPROM: Configuration saved"));
 }
@@ -608,3 +623,23 @@ void	FAN_Tasks		( void )
 		_millisFANMode = millis();
 	}
 }
+
+/****************************************************/
+/*		Battery Voltage (mV)						*/
+/****************************************************/
+	uint16_t	BatteryVolt		( void ) 
+	{
+		static uint8_t test=0;
+		unsigned long	_tot = 0;
+		
+		for( int _x=0; _x < BATT_AVERAGE; _x++)
+		{
+			_tot += (unsigned long)analogRead(Vin);
+		}
+		
+		_tot /= BATT_AVERAGE;
+		//return (uint16_t)_tot;
+		return 10120+(test++);
+	}
+	
+	

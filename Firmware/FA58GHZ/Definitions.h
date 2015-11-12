@@ -82,7 +82,7 @@
 	#define pinFan			5	//could be PWM controlled
 	
 		
-//Voltage Input monitor	
+//Voltage Battery Input monitor	
 	#define Vin				A5
 
 /*********************************************************************************************************/
@@ -95,7 +95,9 @@
 	#define     BUTTON_CLICK			600     //Minimum value for Click
 	#define     BUTTON_HOLD				3000    //Minimum value for Hold
 	#define     BUTTON_HOLDLONG			4000    //Minimum value for Hold Long
-	
+
+	#define		BATT_AVERAGE			15		//Number of ADC average samples
+		
 	enum stateButton
 	{
 		sbutton_idle,

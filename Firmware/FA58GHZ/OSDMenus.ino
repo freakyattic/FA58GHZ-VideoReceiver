@@ -80,10 +80,13 @@
 	void	OSD_Tasks	( void )
 	{
 		uint8_t				_val0;
+		uint16_t			_val16_0, _val16_1;
 		static uint8_t		_prevIndex;
+		static uint8_t		_Update;
 		static uint8_t		_autoInc;
-		static uint8_t		_fanInc, _fanPower, _fanMode, _fanUpdate;
-		
+		static uint8_t		_fanInc, _fanPower, _fanMode;
+		static uint8_t		_batEnable, _batType;
+		static uint16_t		_batCell, _batCalib;
 		
 		switch(OSD_State)
 		{
@@ -127,8 +130,7 @@
 				
 				//Place information about the channel selected.
 				TV.draw_line(0,84, TV_WIDTH-1, 84, 1);
-				TV.printPGM(12, 87,PSTR("Channel:"));
-				TV.set_cursor(50, 87);
+				TV.set_cursor(10, 87);
 				TV.print(RF_ChannelGet(),HEX);
 				TV.printPGM(PSTR(" - "));
 				TV.print(RF_FrequencyGet());
@@ -147,11 +149,26 @@
 				if(millis() > _millisRSSI)
 				{
 					_millisRSSI = millis() + 250;
-					TV.set_cursor(100, 87);
-					TV.printPGM(PSTR("     "));	//Clean
-					TV.set_cursor(100, 87);
+					
+					//RSSI
+					TV.set_cursor(60, 87);
+					TV.printPGM(PSTR("    "));	//Clean
+					TV.set_cursor(60, 87);
 					TV.print(RF_RSSIGet(), DEC);
 					TV.printPGM(PSTR("%"));
+					
+					//Voltage
+					TV.set_cursor(95, 87);
+					TV.print("     ");
+					TV.set_cursor(95, 87);
+					_val16_1 = BatteryVolt();
+					_val16_0 = _val16_1/1000;
+					TV.print(_val16_0);
+					TV.print(".");
+					_val16_0 = (_val16_1 - _val16_0*1000)/10;
+					if(_val16_0<10)	TV.print("0");
+					TV.print(_val16_0);
+					TV.print("v");
 				}
 				break;				
 				
@@ -176,19 +193,19 @@
 				TV.printPGM(5,30,PSTR("RF Channel Setup"));
 				TV.printPGM(5,40,PSTR("RF Spectrum"));
 				TV.printPGM(5,50,PSTR("Fan Output"));
-				TV.printPGM(5,60,PSTR("Exit"));
+				TV.printPGM(5,60,PSTR("Battery Monitor"));
+				TV.printPGM(5,70,PSTR("Exit"));
 				
 				//Place information about the channel selected at the bottom
 				TV.select_font(font4x6);
 				TV.draw_line(0,84, TV_WIDTH-1, 84, 1);
-				TV.printPGM(12, 87,PSTR("Channel:"));
-				TV.set_cursor(50, 87);
+				TV.set_cursor(10, 87);
 				TV.print(RF_ChannelGet(),HEX);
 				TV.printPGM(PSTR(" - "));
 				TV.print(RF_FrequencyGet());
 				TV.printPGM(PSTR(" -"));
 				
-				SelectedMenu_Ini(4,5);
+				SelectedMenu_Ini(5,6);
 				_millisRSSI = millis();
 				_millisMenu = millis()+MENU_TIMEOUT;
 				OSD_State = OSDs_MainUpdate;
@@ -205,12 +222,28 @@
 				if(millis() > _millisRSSI)
 				{
 					TV.select_font(font4x6);
+					
 					_millisRSSI = millis() + 250;
-					TV.set_cursor(100, 87);
+					
+					//RSSI
+					TV.set_cursor(60, 87);
 					TV.printPGM(PSTR("     "));	//Clean
-					TV.set_cursor(100, 87);
+					TV.set_cursor(60, 87);
 					TV.print(RF_RSSIGet(), DEC);
 					TV.printPGM(PSTR("%"));
+					
+					//Voltage
+					TV.set_cursor(95, 87);
+					TV.print("     ");
+					TV.set_cursor(95, 87);
+					_val16_1 = BatteryVolt();
+					_val16_0 = _val16_1/1000;
+					TV.print(_val16_0);
+					TV.print(".");
+					_val16_0 = (_val16_1 - _val16_0*1000)/10;
+					if(_val16_0<10)	TV.print("0");
+					TV.print(_val16_0);
+					TV.print("v");
 				}
 				
 			//Next Menu
@@ -239,7 +272,10 @@
 						case 3:		//Fan Output
 							OSD_State = OSDs_FANMenu;
 							break;
-						case 4:		//Exit
+						case 4:		//Battery Monitor
+							OSD_State = OSDs_BatteryMon;
+							break;
+						case 5:		//Exit
 							OSD_State = OSDs_Off;
 							break;	
 					}
@@ -638,7 +674,7 @@
 				_fanPower = eep_FANPower;
 				_fanMode = eep_FANMode;
 				
-				_fanUpdate = 1;		//Update screen parametes
+				_Update = 1;		//Update screen parametes
 					
 				_millisMenu = millis() + MENU_TIMEOUT;
 				OSD_State = OSDs_FANMenuUpdate;
@@ -701,14 +737,14 @@
 							break;
 					}
 					
-					_fanUpdate = 1;		//Update screen parametes
+					_Update = 1;		//Update screen parametes
 					_millisMenu = millis()+MENU_TIMEOUT;					
 				}						
 				
 			//Update Screen values.
-				if(_fanUpdate)
+				if(_Update)
 				{
-					_fanUpdate = 0;
+					_Update = 0;
 			
 					//FAN INC
 					TV.printPGM(80,20,PSTR("      "));//Clean
@@ -778,6 +814,216 @@
 				if(millis() > _millisMenu)
 					OSD_State = OSDs_Main;
 				break;
+				
+//Batter Monitor	------------------------------------------------------				
+			case OSDs_BatteryMon:
+				Clear_ButtonStates();
+				TV.resume();
+				TV.clear_screen();
+				
+				TV.draw_rect(0,0,TV_WIDTH-1, TV_HEIGHT-1, 1);
+				TV.select_font(font4x6);
+				TV.printPGM(20,3,PSTR("Battery Monitor"));
+				TV.draw_line(0,11,TV_WIDTH-1,11,2);
+				
+				//Menu
+				TV.select_font(font6x8);
+				TV.printPGM(5,20,PSTR("Bat. Alarm :"));
+				TV.printPGM(5,30,PSTR("Bat. Cells :"));
+				TV.printPGM(5,40,PSTR("Cell Alarm :"));
+				TV.printPGM(5,50,PSTR("Calibrate  :"));
+				TV.printPGM(5,60,PSTR("Exit"));
+
+				//Mark the selected Input
+				SelectedMenu_Ini(4, 5, 75);
+				
+				//Load Values
+				_batEnable = eep_BattEnable;
+				_batType = eep_BattType;
+				_batCell = eep_BattCell;
+				_batCalib = epp_BattCalib;
+				
+				_Update = 1;		//Update screen parameters
+				
+				_millisMenu = millis() + MENU_TIMEOUT;
+				OSD_State = OSDs_BatteryMonUpdate;
+				break;		
+			case OSDs_BatteryMonUpdate:
+				
+			//Next menu
+				if(isbuttonNext_Click())
+				{
+					_millisMenu = millis()+MENU_TIMEOUT;
+					SelectedMenu_Next();
+				}
+			
+			//Timeout - No user input
+				if(millis() > _millisMenu)
+					OSD_State = OSDs_Main;
+					
+			//Mode Hold
+				if(isbuttonMode_Click()|isbuttonNext_Hold())
+				{
+
+					switch(SelectedMenu_Get())
+					{
+						case 0:				// Bat alarm On/Off
+							_batEnable ^= 1;
+							break;	
+						case 1:				//Cells
+							if(_batType==2)
+								_batType = 3;
+							else
+								_batType = 2;
+							break;
+						case 2:				//Warning
+							_Update = 1;
+							_val0 = 1;
+							TV.printPGM(80,40,PSTR(">    <"));
+							while(_val0)
+							{
+								Buttons_Tasks();
+								
+								if(_Update)
+								{
+									_Update = 0;
+									TV.printPGM(86,40,PSTR("    "));
+									TV.set_cursor(86,40);
+									_val16_0 = _batCell/1000;
+									TV.print(_val16_0);
+									TV.print(".");
+									_val16_0 = (_batCell - _val16_0*1000)/10;
+									if(_val16_0<10)	TV.print("0");
+									TV.print(_val16_0);
+								}
+								
+								if(isbuttonMode_Hold()) //Exit
+									_val0 = 0;
+								if(isbuttonMode_Click()&(_batCell < 4400))
+								{
+									_batCell += 50;
+									_Update = 1;
+								}
+								if(isbuttonNext_Click()&(_batCell > 2500))
+								{
+									_Update = 1;
+									_batCell -= 50;
+								}
+							}
+							TV.printPGM(80,40,PSTR("       "));
+							break;
+						case 3:				//Calibrate Voltage
+							TV.printPGM(80,50,PSTR(">     <"));
+							_Update = 1;
+							_val0 = 1;
+							_val16_1 = BatteryVolt();
+							while(_val0)
+							{
+								Buttons_Tasks();
+								
+								if(_Update)
+								{
+									_Update = 0;
+									TV.printPGM(86,50,PSTR("     "));
+									TV.set_cursor(86,50);
+									_val16_0 = _val16_1/1000;
+									TV.print(_val16_0);
+									TV.print(".");
+									_val16_0 = (_val16_1 - _val16_0*1000)/10;
+									if(_val16_0<10)	TV.print("0");
+									TV.print(_val16_0);
+								}
+								
+								if(isbuttonMode_Hold()) //Exit
+									_val0 = 0;
+								if(isbuttonMode_Click())
+								{
+									_val16_1 += 10;
+									_Update = 1;
+								}
+								if(isbuttonNext_Click()&(_val16_1>100))
+								{
+									_val16_1 -= 10;	
+									_Update = 1;
+								}
+							}
+							TV.printPGM(80,50,PSTR("       "));		//Clean
+							
+							//Save calib factor
+							_Update = 1;
+							break;
+						default:
+						case 4:
+							OSD_State = OSDs_Main;
+							break;
+					}
+					
+					_Update = 1;		//Update screen parameters
+					_millisMenu = millis()+MENU_TIMEOUT;
+				}
+				
+			//Save Parameters if exit with mode hold
+				if(SelectedMenu_Get()==4)
+				{
+					if(isbuttonMode_Hold()|isbuttonNext_Hold())
+					{
+						//Save eeprom parameters
+						eep_BattEnable = _batEnable;
+						eep_BattType = _batType;
+						eep_BattCell = _batCell;
+						epp_BattCalib = _batCalib;
+					
+						Save_EEPROM();
+						beep_Confirmation();
+					
+						TV.set_cursor(40, 80);
+						TV.printPGM(PSTR("SAVED !!!"));
+						delay(1500);
+					
+						OSD_State = OSDs_Main;
+					}
+				}
+				
+			//Update Screen Values
+				if(_Update)
+				{
+					_Update = 0;
+				
+				//On/Off
+					TV.printPGM(80,20,PSTR("   "));
+					if(_batEnable)
+						TV.printPGM(80,20,PSTR("On"));
+					else
+						TV.printPGM(80,20,PSTR("Off"));
+					
+				//Type					
+					TV.printPGM(80,30,PSTR("  "));
+					if(_batType == 2)
+					TV.printPGM(80,30,PSTR("2s"));
+					else
+					TV.printPGM(80,30,PSTR("3s"));
+				
+				//Cell Voltage
+					TV.printPGM(80,40,PSTR("  "));
+					TV.set_cursor(80,40);
+					_val16_0 = _batCell/1000;
+					TV.print(_val16_0);
+					TV.print(".");
+					_val16_0 = _batCell - _val16_0*1000;
+					TV.print(_val16_0);
+					
+				//Batt Calib
+					TV.printPGM(80,50,PSTR("  "));
+					TV.set_cursor(80,50);
+					_val16_1 = BatteryVolt();
+					_val16_0 = _val16_1/1000;
+					TV.print(_val16_0);
+					TV.print(".");
+					_val16_0 = _val16_1 - _val16_0*1000;
+					TV.print(_val16_0);
+				}
+								
+				break;					
 		}
 	
 	}

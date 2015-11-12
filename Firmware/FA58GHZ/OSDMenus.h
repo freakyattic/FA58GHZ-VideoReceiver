@@ -76,6 +76,9 @@
 		
 		OSDs_FANMenu,
 		OSDs_FANMenuUpdate,
+		
+		OSDs_BatteryMon,
+		OSDs_BatteryMonUpdate,
 	};
 
 
