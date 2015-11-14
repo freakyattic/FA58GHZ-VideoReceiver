@@ -1,3 +1,14 @@
 
-TODO:
--Change fan diode footprint for a bigger one.
+	FA58GHZ Video RF RX
+	
+-----TODO	-------------------------------------------------
+
+Version 1.1:
+	-
+
+----DONE	-------------------------------------------------	
+
+Version 1.0
+	-Change fan diode footprint for a bigger one.
+	-Wrong footpring for OPamp IC2 IC3
+	-Fix problems with RF wrong pinout.
