@@ -12,8 +12,10 @@ This is the repository for the FA58GHZ ( FreakyAttic 5.8GHZ ) RF Video Receiver 
 
 This module it is going to be integrated in a FPV goggles like the Fatshark base SD, but It could be used for many other platforms.
 
+![](https://github.com/freakyattic/FA58GHZ-VideoReceiver/blob/master/Hardware/Pictures/FA58GHZ_PCB.jpg)
+![](https://github.com/freakyattic/FA58GHZ-VideoReceiver/blob/master/Hardware/Pictures/FA58GHZ_PCB_Bottom.jpg)
 
-# ---PROJECT STILL UNDER DEVELOPMENT - BETA VERSION ---
+# ---PROJECT UNDER DEVELOPMENT ---
 
 # FA58GHZ Schematic
 ![Intro Screen](https://github.com/freakyattic/FA58GHZ-VideoReceiver/blob/master/FA58GHZ-Schematic.png)
